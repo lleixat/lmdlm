@@ -1,0 +1,4 @@
+#dossier model
+
+la dedans on place juste les modèles.
+(classes d'interraction avec le sgbd et le controlleur utilisé)

@@ -1,0 +1,16 @@
+#le dossier vues
+
+la dedans on place juste les vues.
+(la partie affichée dans le navigateur du type)
+
+
+#les dossiers :
+
+system : les pages système (erreurs diverses,404 etc).
+
+static : les pages uniquement statiques.
+
+defaut : le reste des pages.
+
+
+

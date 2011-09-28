@@ -1,0 +1,6 @@
+#dossier controller
+
+la dedans on essaye de placer juste les classes de controle
+le maillon du millieu de la chaine MVC quoi...
+
+putain jsuis écrivain des fois..   =)
