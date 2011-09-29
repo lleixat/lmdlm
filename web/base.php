@@ -19,6 +19,7 @@ define("LAYOUT",    VUES.DS."layout");
 define('PAGE_404',  VUE_SYS. "404.php");
 
 define("LAYOUT_HEADER",     LAYOUT . DS . "header.php");
+define("LAYOUT_NAV",     LAYOUT . DS . "nav.php");
 define("LAYOUT_FOOTER",     LAYOUT . DS . "footer.php");
 define("LAYOUT_MENU",       LAYOUT . DS . "menu.php");
 

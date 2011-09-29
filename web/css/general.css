@@ -5,13 +5,66 @@
     Description:
         Style de la partie générale du bourrier.
 */
-
+@import url(http://fonts.googleapis.com/css?family=Cousine:400,400italic,700,700italic);
+@import url(http://fonts.googleapis.com/css?family=Holtwood+One+SC);
 html{
 
 }
 body{
     margin: 0;
     padding: 0;
+    background-color: #6cb6dd;
+    color: #ADE0E0;
+    font-family: 'Cousine', sans-serif;
+}
+h1,h2,h3,h4,h5,h6{
+    font-family: 'Holtwood One SC', serif;
+    margin: 0;
 }
 
-/* == ETC == */
+
+
+
+
+#conteneur{
+    width: 950px;
+    margin: 0 auto;
+    background-color: #097db8;
+}
+
+header{
+    height: 200px;
+    background: #077bb4 url(../imgs/header.jpg) left top no-repeat;
+}
+
+nav{
+    margin-top: 15px;
+    width: 220px;
+    height: 450px;
+    float: left;
+}
+
+nav a{
+    background-color: #2B89BA;
+    text-decoration: none;
+    padding: 3px 6px;
+    display: block;
+    margin: 5px auto;
+    text-align: center;
+    width: 80%;
+    color: #ADE0E0;
+}
+nav a:hover{
+    background-color: #6BABCB;
+}
+
+#content{
+    width: 730px;
+    float: left;
+}
+
+footer{
+    clear: left;
+    height: 200px;
+    background: #077bb4 url(../imgs/footer.jpg) left top no-repeat;
+}

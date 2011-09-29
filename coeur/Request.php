@@ -11,7 +11,15 @@ class Request {
     public $params = array();
 
     function __construct() {
-        $path_info = trim($_SERVER['PATH_INFO'], "/");
+
+
+        $path_info = (isset($_SERVER['PATH_INFO']))?trim($_SERVER['PATH_INFO'], "/"):false;
+
+        // si y a pas de path_info c'est qu'on est a la racine
+        // donc on redirige vers l'accueil
+        if(!$path_info)
+            header('Location:http://localhost/lmdlm/accueil.html');
+
 
         // on INVERSE le tableau contenant la découpe de l'url
         $parts = array_reverse(explode('/', $path_info));
