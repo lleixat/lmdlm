@@ -22,6 +22,7 @@ define("LAYOUT_HEADER",     LAYOUT . DS . "header.php");
 define("LAYOUT_NAV",     LAYOUT . DS . "nav.php");
 define("LAYOUT_FOOTER",     LAYOUT . DS . "footer.php");
 define("LAYOUT_MENU",       LAYOUT . DS . "menu.php");
+define("LAYOUT_USER_BAR",       LAYOUT . DS . "user_bar.php");
 
 require CORE . DS . 'includes.php';
 

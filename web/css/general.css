@@ -25,6 +25,22 @@ h1,h2,h3,h4,h5,h6{
 
 
 
+#user_bar{
+    background-color: #000;
+    height: 30px;
+}
+#user_bar p{
+    margin: 0;
+    line-height: 30px;
+    float: right;
+    margin-right: 10px;
+}
+#user_bar input{
+    background-color: #2B89BA;
+    border: none;
+    text-align: center;
+    color: #ADE0E0;
+}
 
 #conteneur{
     width: 950px;

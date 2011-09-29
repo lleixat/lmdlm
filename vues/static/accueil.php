@@ -9,15 +9,15 @@
 
         <link rel="stylesheet" media="screen" href="css/general.css" />
         <link rel="stylesheet" media="screen" href="css/trick.css" />
-        <script src="js/script.js"></script>
+        <script src="js/jquery-1.6.4.min.js"></script>
 
         <meta name="description" content="<?php echo DESCRIPTION ?>">
     </head>
     <body>
         <div id="conteneur" class="ombre10">
             <?php
+            require LAYOUT_USER_BAR;
             require LAYOUT_HEADER;
-
             require LAYOUT_NAV;
             ?>
 
