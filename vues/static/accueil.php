@@ -4,7 +4,7 @@
 <html lang="fr">
     <head>
         <meta charset="UTF-8">
-
+        <base href="<?php echo URL_BASE; ?>" />
         <title><?php echo TITLE ?></title>
 
         <link rel="stylesheet" media="screen" href="css/general.css" />

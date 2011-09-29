@@ -52,7 +52,7 @@ class Loader {
                 if (file_exists($file)) {
                     require CONTROLLER . DS . "Controller.php";
                     require $file;
-                    $obj = new $name;
+                    $obj = new $name($this->request);
                     // la methode souhaitée existe t elle
                     if (method_exists($obj, $this->request->action)) {
                         // on lance la methode de cet objet dynamique

@@ -6,7 +6,7 @@ header("HTTP/1.0 404 Not Found");
 
 <html lang="fr">
     <head>
-        <base href="http://localhost/lmdlm/" />
+        <base href="<?php echo URL_BASE; ?>" />
         <meta charset="UTF-8">
 
         <title><?php echo TITLE ?></title>
