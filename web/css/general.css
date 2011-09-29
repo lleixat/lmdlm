@@ -41,7 +41,17 @@ h1,h2,h3,h4,h5,h6{
     text-align: center;
     color: #ADE0E0;
 }
+#user_bar input[type=submit]{
+    vertical-align: middle;
+    display: inline-block;
+    width: 34px;
+    height: 18px;
+    background: transparent url(../imgs/bouton_ub_ok.png) left top no-repeat;
+}
 
+#user_bar input[type=submit]:hover{
+    background-position: left bottom;
+}
 #conteneur{
     width: 950px;
     margin: 0 auto;

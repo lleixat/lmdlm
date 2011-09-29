@@ -1,12 +1,11 @@
 <?php
-header("HTTP/1.0 404 Not Found");
-?>
 
+?>
+<?php ?>
 <!DOCTYPE html>
 
 <html lang="fr">
     <head>
-        <base href="http://localhost/lmdlm/" />
         <meta charset="UTF-8">
 
         <title><?php echo TITLE ?></title>
@@ -26,14 +25,8 @@ header("HTTP/1.0 404 Not Found");
             ?>
 
             <din id="content">
-                <h1 class="titre_page">Erreur 404</h1>
-                <p>Il n'y a rien a voir ici ..!</p>
-                    <?php
-                    if(isset($phrase)){
-                        echo "<h3>Indication dev</h3>";
-                        echo "<p>{$phrase}</p>";
-                    }
-                    ?>
+                <h1 class="titre_page">Inscription</h1>
+                <p>Creer formulaire simple pour inscription</p>
             </din>
 
 

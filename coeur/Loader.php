@@ -19,6 +19,7 @@ class Loader {
                 // on appelle juste la page statique demandée
                 $file = VUES . DS . $this->request->dossier . DS . $this->request->vue;
                 if (file_exists($file)) {
+
                     require $file;
                     return true;
                 } else {
@@ -36,6 +37,35 @@ class Loader {
                 }
                 break;
             case "action":
+                // on va charger dynamiquement le controller qui correspond
+                // et lui lancer la methode (action) demandée en lui donnant
+                // comme arguments request->params qui contient les parametres
+                // post et get (dans ce case précis)
+                // nom du controller
+                $name = ucfirst($this->request->controller) . "Controller";
+                // fichier physique
+                $file = CONTROLLER . DS . $name . ".php";
+                // existe t il
+                if (file_exists($file)) {
+                    require CONTROLLER . DS . "Controller.php";
+                    require $file;
+                    $obj = new $name;
+                    // la methode souhaitée existe t elle
+                    if (method_exists($obj, $this->request->action)) {
+                        // on lance la methode de cet objet dynamique
+                        call_user_func_array(array($obj, $this->request->action), $this->request->params);
+                    } else {
+                        // methode inexistante
+                        $this->error = "La méthode '<b>{$this->request->action}</b>' n'existe pas dans l'objet {$name}().";
+                        $this->affiche_erreur();
+                    }
+                } else {
+                    // fichier du controller inexistant
+                    $this->error = "Le fichier {$file} n'existe pas";
+                    $this->affiche_erreur();
+                }
+
+                print_r($this->request);
                 break;
             case "full_action":
                 break;
@@ -62,7 +92,8 @@ class Loader {
     function affiche_erreur() {
         // gestion du probleme
         if (MODE == "dev") {
-            echo "<p>" . $this->error . "</p>";
+            $phrase = $this->error;
+            require PAGE_404;
         } else {
             require PAGE_404;
         }

@@ -16,7 +16,7 @@ define("UPLOADS",   WEB.DS."uploads");
 define("VUE_SYS",   VUES.DS."system");
 define("LAYOUT",    VUES.DS."layout");
 
-define('PAGE_404',  VUE_SYS. "404.php");
+define('PAGE_404',  VUE_SYS.DS. "404.php");
 
 define("LAYOUT_HEADER",     LAYOUT . DS . "header.php");
 define("LAYOUT_NAV",     LAYOUT . DS . "nav.php");
