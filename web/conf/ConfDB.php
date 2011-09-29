@@ -15,6 +15,12 @@ class ConfDB {
             "pass" => "")
     );
 
+    static $tables = array(
+        "TABLE_ETAB"  => "etab",
+        "TABLE_PROMO" => "promo",
+        "TABLE_USERS" => "users"
+    );
+
 }
 
 ?>

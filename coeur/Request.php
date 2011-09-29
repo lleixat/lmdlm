@@ -39,7 +39,7 @@ class Request {
         if (isset($parts[0])) {
             $this->href = $parts[0];
             $tab_temp = explode("_", trim($parts[0], "_"));
-            $this->dossier =    (count($tab_temp) == 2) ? $tab_temp[0] : "defaut";
+            $this->dossier =    (count($tab_temp) == 2) ? $tab_temp[0] : "static";
             $this->vue =        (count($tab_temp) == 2) ? $tab_temp[1] : $tab_temp[0];
         }
 

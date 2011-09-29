@@ -16,7 +16,7 @@ class Loader {
     function dispatcher() {
         switch ($this->request->request_type) {
             case "statique":
-                // on appelle juste la page statique
+                // on appelle juste la page statique demandée
                 $file = VUES . DS . $this->request->dossier . DS . $this->request->vue;
                 if (file_exists($file)) {
                     require $file;
@@ -64,7 +64,6 @@ class Loader {
         if (MODE == "dev") {
             echo "<p>" . $this->error . "</p>";
         } else {
-            $css = "<link rel='stylesheet' href='css/general.css' type='text/css' />";
             require PAGE_404;
         }
     }

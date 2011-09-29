@@ -1,0 +1,10 @@
+RewriteEngine On
+
+# mon url locale http://localhost/lmdlm/
+# donc
+
+RewriteBase /lmdlm
+
+
+# on renvoie tout dans /web
+RewriteRule (.*)    web/$1
