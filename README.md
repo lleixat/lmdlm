@@ -1,4 +1,4 @@
-## LE MOT DE LA MORT
+# LE MOT DE LA MORT
 
 au cas ou le commit marche pas je copie le texte ici, autant
 que ce foutu readme de merde serve a quelque chose...
@@ -12,7 +12,3 @@ donc réorganisation totale chef !!!
 
 29 sept. 2011
 Organisation de la structure en MVC
-
-`test commit netbeans`
-
-
