@@ -40,8 +40,8 @@ header{
 nav{
     margin-top: 15px;
     width: 220px;
-    height: 450px;
     float: left;
+    position: fixed;
 }
 
 nav a{
@@ -60,11 +60,20 @@ nav a:hover{
 
 #content{
     width: 730px;
-    float: left;
+    float: right;
+    min-height: 260px;
 }
-
+#content .titre_page{
+    margin-top: 5px;
+}
+#content hr{
+    border: none;
+    height: 1px;
+    background-color: #2B89BA;
+    width: 90%;
+}
 footer{
-    clear: left;
+    clear: both;
     height: 200px;
     background: #077bb4 url(../imgs/footer.jpg) left top no-repeat;
 }

@@ -1,73 +1,108 @@
+<?php ?>
 <!DOCTYPE html>
-<html>
 
-    
+<html lang="fr">
     <head>
-        <title>Versioning</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="UTF-8">
+
+        <title>LMDLM - Version</title>
+
+        <link rel="stylesheet" media="screen" href="css/general.css" />
+        <link rel="stylesheet" media="screen" href="css/trick.css" />
         <style type="text/css">
-            .cadre_version{
-                border: 1px dotted #cccccc;
-                width: 800px;
-                margin: 10px auto;
+            .cadre_bleu{
+                margin: 20px auto;
+                margin-right: 15px;
+                margin-bottom: 30px;
                 padding:10px  20px;
-                background-color: #f4f2f2;
+                background-color: #2B89BA;
             }
             p{
                 margin: 0;
             }
         </style>
+        <script src="js/script.js"></script>
+
+        <meta name="description" content="<?php echo DESCRIPTION ?>">
     </head>
     <body>
-        <h1>LE VERSIONING A PAPA</h1>
-        <!-- SYNTAXE A RESPECTER -->
-        <div class="cadre_version">
-            <h3>version 1.1</h3>
-            <h4>Arnaud / 28-09-2011 13:30</h4>
-            <ul>
-                <li>ajout dossier backup</li>
-                <li>ajout fichier projectz.php</li>
-                <li>ajout versioning
-                    <p>== > ajout de ce fichier (volontairement rétro)</p>
-                </li>
-                <li>modifs css pour accorder les cadres</li>
-            </ul>
-        </div>
-        <hr />
-        <h1>TO DO</h1>
-        <div class="cadre_version">
-            <p>Ici se trouve la liste des choses encore à faire et/ou à prévoir :</p>
-            <ul style="list-style-type: none;">
-                <li><INPUT type="checkbox" > Grossir la liste des mots</li>
-                <li><INPUT type="checkbox" > Passer d'un nouveau mot par semaine a un par jour</li>
-                <li><INPUT type="checkbox" > ajouter un lien avec chaque mot validé</li>
-                <li><INPUT type="checkbox" > </li>
-                <li><INPUT type="checkbox" > </li>
-                <li><INPUT type="checkbox" > </li>
-            </ul>
-        </div>
-        <hr />
-        <h1>Règles du jeu</h1>
-        <div class="cadre_version">
-            <p>Les règles du jeux sont simple et à la portée de tous, mais doivent être écrites pour éviter les
-                réclamations. Attention, suivez bien ...</p>
-            <br/>
-            <p>Chaque jour le <em>moteur de mot</em> tire au sort un mot (donc) pour chaque joueur.
-                Ce mot doit être inséré dans un commentaire (preuve à l'appui !) sur un forum CVTIC avant
-                la fin de la semaine/journée.</p>
-            <br/>
-            <p>Pour que le votre journée/semaine soit validée, on doit trouver impérativement:</p>
-            <ul>
-                <li>
-                    <h3>La validation:</h3>
-                    <p>Elle permet de déclarer à la communauté votre forfait. Elle passe par la déclaration du lien pointant vers le post concerné.</p>
-                </li>
-                <li>
-                    <h3>Le marqueur: (&#8480;)</h3>
-                    <p>Inséré après le mot, il permet de repérer le <em>mot de la mort&#8480;</em> parmi les posts parfois nombreux des forums. Pour l'insérer, vous pouvez le copiez coller ou l'insérer en HTML avec & #8480;</p>
-                    <p>note: Il s'agit du tarde mark <em>service mark</em> détourné pour signifier ici <em>serial marker</em> ? </p>
-                </li>
-            </ul>
+        <div id="conteneur" class="ombre10">
+            <?php
+            require LAYOUT_HEADER;
+
+            require LAYOUT_NAV;
+            ?>
+
+            <din id="content">
+                <h1 class="titre_page">LE VERSIONING A PAPA</h1>
+                <!-- SYNTAXE A RESPECTER -->
+                <div class="cadre_bleu radius10">
+                    <h3>version 1.2</h3>
+                    <h5>Arnaud / 29-09-2011 16:30</h5>
+                    <ul>
+                        <li>Dépot du projet sur GitHub (merci thomas)</li>
+                        <li>Transormation de la structure en MVC</li>
+                        <li>Passage a une architecture de base HTML5</li>
+                        <li>création design bleu/nuages</li>
+                        <li>Création d'un menu navigation latéral</li>
+                    </ul>
+                </div>
+                <div class="cadre_bleu radius10">
+                    <h3>version 1.1</h3>
+                    <h5>Arnaud / 28-09-2011 13:30</h5>
+                    <ul>
+                        <li>ajout dossier backup</li>
+                        <li>ajout fichier projectz.php</li>
+                        <li>ajout versioning
+                            <p>== > ajout de ce fichier (volontairement rétro)</p>
+                        </li>
+                        <li>modifs css pour accorder les cadres</li>
+                    </ul>
+                </div>
+                <hr />
+                <h1 id="todo">TO DO</h1>
+                <div class="cadre_bleu radius10">
+                    <p>Ici se trouve la liste des choses encore à faire et/ou à prévoir :</p>
+                    <ul style="list-style-type: none;">
+                        <li><INPUT type="checkbox" > Grossir la liste des mots</li>
+                        <li><INPUT type="checkbox" > Passer d'un nouveau mot par semaine a un par jour</li>
+                        <li><INPUT type="checkbox" > ajouter un lien avec chaque mot validé</li>
+                        <li><INPUT type="checkbox" > </li>
+                        <li><INPUT type="checkbox" > </li>
+                        <li><INPUT type="checkbox" > </li>
+                    </ul>
+                </div>
+                <hr />
+                <h1 id="reglement">Règles du jeu</h1>
+                <div class="cadre_bleu radius10">
+                    <p>Les règles du jeux sont simple et à la portée de tous, mais doivent être écrites pour éviter les
+                        réclamations. Attention, suivez bien ...</p>
+                    <br/>
+                    <p>Chaque jour le <b>moteur de mot</b> tire au sort un mot (donc) pour chaque joueur.
+                        Ce mot doit être inséré dans un commentaire (preuve à l'appui !) sur un forum CVTIC avant
+                        la fin de la semaine/journée.</p>
+                    <br/>
+                    <p>Pour que le votre journée/semaine soit validée, on doit trouver impérativement:</p>
+                    <ul>
+                        <li>
+                            <h4>La validation</h4>
+                            <p>Elle permet de déclarer à la communauté votre forfait. Elle passe par la déclaration du lien pointant vers le post concerné.</p>
+                        </li>
+                        <li>
+                            <h4>Le marqueur &#8480;</h4>
+                            <p>Inséré après le mot, il permet de repérer le <em>mot de la mort&#8480;</em> parmi les posts parfois nombreux des forums. Pour l'insérer, vous pouvez le copiez coller ou l'insérer en HTML avec & #8480;</p><br />
+                            <p><u>Note:</u><br />Il s'agit du tarde mark <em>service mark</em> détourné pour signifier ici <em>serial marker</em> ? </p>
+                        </li>
+                    </ul>
+                </div>
+            </din>
+
+
+
+
+            <?php
+            require LAYOUT_FOOTER;
+            ?>
         </div>
     </body>
 </html>
