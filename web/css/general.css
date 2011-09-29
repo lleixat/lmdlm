@@ -48,6 +48,11 @@ h1,h2,h3,h4,h5,h6{
     height: 18px;
     background: transparent url(../imgs/bouton_ub_ok.png) left top no-repeat;
 }
+#user_bar .ub_liens{
+    color: #6cb6dd;
+    font-weight: bold;
+    text-decoration: none;
+}
 
 #user_bar input[type=submit]:hover{
     background-position: left bottom;

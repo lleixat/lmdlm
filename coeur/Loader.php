@@ -16,7 +16,7 @@ class Loader {
      */
     function dispatcher() {
         switch ($this->request->request_type) {
-            case "statique":
+            case "statique": // a modifier
                 // on appelle juste la page statique demandée
                 $file = VUES . DS . $this->request->dossier . DS . $this->request->vue;
                 if (file_exists($file)) {
@@ -56,8 +56,9 @@ class Loader {
                     // la methode souhaitée existe t elle
                     if (method_exists($obj, $this->request->action)) {
                         // on lance la methode de cet objet dynamique
+                        $array_param = (is_array($this->request->params))?$this->request->params:array();
 
-                        call_user_func_array(array($obj, $this->request->action), $this->request->params);
+                        call_user_func_array(array($obj, $this->request->action), $array_param);
                     } else {
                         // methode inexistante
                         $this->error = "La méthode '<b>{$this->request->action}</b>()' n'existe pas dans l'objet '<b>{$name}()</b>'.";
@@ -71,6 +72,7 @@ class Loader {
 
                 break;
             case "full_action":
+                echo "FULL ACTION => pas encore cod&eacute; .. ca va vite venir !!  =)";
                 break;
         }
     }
