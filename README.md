@@ -10,6 +10,9 @@ par exemple 2011 et 2012 servent a rien vu qu'on va passer par la base...
 et backup sert plus a rien non plus vu qu'on va GITHUBer tout le tintamarre.
 donc réorganisation totale chef !!!
 
+29 sept. 2011
+Organisation de la structure en MVC
+
 `test commit netbeans`
 
 
