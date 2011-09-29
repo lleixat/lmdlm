@@ -10,6 +10,7 @@ class Loader {
         $this->dispatcher();
     }
 
+
     /**
      * Permet de gerer ce qui va etre chargé ou non
      */
@@ -41,6 +42,8 @@ class Loader {
                 // et lui lancer la methode (action) demandée en lui donnant
                 // comme arguments request->params qui contient les parametres
                 // post et get (dans ce case précis)
+
+
                 // nom du controller
                 $name = ucfirst($this->request->controller) . "Controller";
                 // fichier physique
@@ -53,10 +56,11 @@ class Loader {
                     // la methode souhaitée existe t elle
                     if (method_exists($obj, $this->request->action)) {
                         // on lance la methode de cet objet dynamique
+
                         call_user_func_array(array($obj, $this->request->action), $this->request->params);
                     } else {
                         // methode inexistante
-                        $this->error = "La méthode '<b>{$this->request->action}</b>' n'existe pas dans l'objet {$name}().";
+                        $this->error = "La méthode '<b>{$this->request->action}</b>()' n'existe pas dans l'objet '<b>{$name}()</b>'.";
                         $this->affiche_erreur();
                     }
                 } else {
@@ -65,7 +69,6 @@ class Loader {
                     $this->affiche_erreur();
                 }
 
-                print_r($this->request);
                 break;
             case "full_action":
                 break;

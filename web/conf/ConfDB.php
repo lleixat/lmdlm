@@ -7,18 +7,22 @@ class ConfDB {
             "hote" => "localhost",
             "base" => "lmdlm",
             "user" => "root",
-            "pass" => ""),
+            "pass" => "",
+            "tables" => array(
+                "TABLE_ETAB"  => "etab",
+                "TABLE_PROMO" => "promo",
+                "TABLE_USERS" => "users"
+        )),
         "distant" => array(
             "hote" => "sql.free.fr",
             "base" => "rudak",
             "user" => "rudak",
-            "pass" => "")
-    );
-
-    static $tables = array(
-        "TABLE_ETAB"  => "etab",
-        "TABLE_PROMO" => "promo",
-        "TABLE_USERS" => "users"
+            "pass" => "",
+            "tables" => array(
+                "TABLE_ETAB"  => "etab",
+                "TABLE_PROMO" => "promo",
+                "TABLE_USERS" => "users"
+        ))
     );
 
 }

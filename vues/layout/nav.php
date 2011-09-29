@@ -1,4 +1,6 @@
-<?php ?>
+<?php
+
+?>
 <nav>
     <a href="accueil.html" class="radius5">Accueil</a>
     <a href="inscription.html" class="radius5">Inscription</a>
