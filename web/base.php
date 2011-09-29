@@ -14,12 +14,13 @@ define("JS",        WEB.DS."js");
 define("UPLOADS",   WEB.DS."uploads");
 
 define("VUE_SYS",   VUES.DS."system");
+define("LAYOUT",    VUES.DS."layout");
 
 define('PAGE_404',  VUE_SYS. "404.php");
 
-define("LAYOUT_HEADER",     VUE_SYS . DS . "header.php");
-define("LAYOUT_FOOTER",     VUE_SYS . DS . "footer.php");
-define("LAYOUT_MENU",       VUE_SYS . DS . "menu.php");
+define("LAYOUT_HEADER",     LAYOUT . DS . "header.php");
+define("LAYOUT_FOOTER",     LAYOUT . DS . "footer.php");
+define("LAYOUT_MENU",       LAYOUT . DS . "menu.php");
 
 require CORE . DS . 'includes.php';
 
