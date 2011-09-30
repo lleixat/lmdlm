@@ -1,14 +1,13 @@
 <?php
-header("HTTP/1.0 404 Not Found");
+// onprend juste ce dont on a besoin dans le tableau de contenu
+$c = $contenu['user_infos_html'];
 ?>
-
 <!DOCTYPE html>
 
 <html lang="fr">
     <head>
-        <base href="<?php echo URL_BASE; ?>" />
         <meta charset="UTF-8">
-
+        <base href="<?php echo URL_BASE; ?>" />
         <title><?php echo TITLE ?></title>
 
         <link rel="stylesheet" media="screen" href="css/general.css" />
@@ -25,21 +24,11 @@ header("HTTP/1.0 404 Not Found");
             require LAYOUT_NAV;
             ?>
 
-            <din id="content">
-                <h1 class="titre_page">Erreur SYSTEME</h1>
-                <p>Il y a une couille dans le script ca arrive vu qu'on est des deustiens !</p>
-                    <?php
-                    if(isset($phrase)){
-                        echo "<h3>Indication dev</h3>";
-                        echo "<p>{$phrase}</p>";
-                    }
-                    if(isset($debug)){
-                        $this->prp($debug);
-                    }
-                    ?>
-            </din>
-
-
+            <div id="content">
+                <?php
+                echo $c;
+                ?>
+            </div>
 
 
             <?php

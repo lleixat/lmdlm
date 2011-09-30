@@ -31,13 +31,28 @@ class UserModel extends Model {
      */
     function get_userInfos($id){
 
-        $sql = "SELECT * FROM " . $this->tables['TABLE_USERS'] . " WHERE id=?";
+        //$sql = "SELECT * FROM " . $this->tables['TABLE_USERS'] . " WHERE id=?";
+        $sql = "SELECT user, mail, image,first
+                inscription , last, u.id, t.nom
+                type_etab , ville, p.nom promo, annee
+                FROM (
+                (
+                users u
+                LEFT JOIN etab e ON u.etab = e.id
+                )
+                LEFT JOIN promo p ON u.promo = p.id
+                )
+                LEFT JOIN type_etab t ON e.type = t.id
+                WHERE u.id =?";
         $req = $this->pdo->prepare($sql);
         $req->bindValue(1, $id, PDO::PARAM_INT);
         $req->execute();
 
         $infos = $req->fetchAll(PDO::FETCH_OBJ);
-        return $infos[0];
+        if(count($infos)>0)
+            return $infos[0];
+        else
+            return false;
     }
 
 }

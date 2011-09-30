@@ -45,6 +45,44 @@ class UserController extends Controller {
         }
     }
 
+    function pageMembre($id) {
+        // on s'écurise l'id vu qu'il vient de l'extérieur
+        $id = intval(filter_var($id, FILTER_SANITIZE_NUMBER_INT));
+        if ($id > 0) {
+
+            // on fait une liaison avec le model
+            $user = new UserModel();
+            $infos = $user->get_userInfos($id);
+
+            if ($infos !== false && is_object($infos)) {
+
+                // $this->prp($infos);
+                // on prepare le html dynampique a envoyer a la page de membre
+                $html = "";
+                $html.= "<h1>{$infos->user}</h1>";
+                $html.= "<p>Adresse e-mail : {$infos->mail}</p>";
+                $html.= "<p>Date d'inscription  : {$this->formatteDate($infos->inscription)}</p>";
+                $html.= "<p>Derniere visite     : {$this->formatteDate($infos->last)}</p>";
+                $html.= "<p>Etablissement       : {$infos->type_etab} de {$infos->ville}</p>";
+                $html.= "<p>Promotion           : {$infos->promo}  |  {$infos->annee}/" . ($infos->annee + 1) . "</p>";
+
+
+                $this->contenu['user_infos_html'] = $html;
+
+                $file = VUES . DS . $this->request->dossier . DS . "page-membre.html";
+                $this->afficher_vue($file);
+            } else {
+            $this->error = "Aucun membre avec cette id ({$id})";
+            $this->affiche_erreur(ERROR_SYS, $this->request->params);
+            return false;
+            }
+        } else {
+            $this->error = "Probleme avec le parametre $id";
+            $this->affiche_erreur(ERROR_SYS, $this->request->params);
+            return false;
+        }
+    }
+
     function deco() {
         session_destroy();
 

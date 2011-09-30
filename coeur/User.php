@@ -20,12 +20,11 @@ class User {
     function __construct($id) {
         $obj = new UserModel();
         $infos = $obj->get_userInfos($id);
-
         $this->user = $infos->user;
         $this->mail = $infos->mail;
-        $this->first = $infos->first;
+        $this->first = $infos->inscription;
         $this->last = $infos->last;
-        $this->etab = $infos->etab;
+        $this->etab = $infos->type_etab;
         $this->promo = $infos->promo;
         $this->image = $infos->image;
         $this->id = $id;

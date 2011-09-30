@@ -11,24 +11,27 @@ class Controller {
 
     protected $contenu = array();
     protected $error;
+    public    $user;
 
     function __construct($request) {
         $this->request = $request;
-        $this->setUserBar();
     }
 
     function setUserBar() {
         // le gars est til connecté
         if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
             // oui alors on cree un objet user
-            $oUser = new User($_SESSION['id_user']);
+            $oUser = $this->init_user();
+
             $html = "<p>Connecté en tant que ";
-            $html .= "<a href='user_page-perso/{$oUser->getId()}/user_page-perso.html' class='ub_liens'>{$oUser->getUser()}</a> ";
+            $html .= "<a href='user_pageMembre/{$oUser->getId()}/user_{$oUser->getUser_url()}.html' class='ub_liens'>{$oUser->getUser()}</a> ";
             $html .= "<a href='user_deco/accueil.html' class='ub_liens' style='margin-left:20px'>Deconnexion</a></p>";
+
             $this->contenu['ub_texte'] = $html;
             $this->contenu['logged'] = true;
-        } elseif($this->request->request_type == "statique" || $this->request->request_type == "error"){
-            // Seulement si le gars n'est pas connecté et que nous allons vers une page statique
+
+        } else{
+            // Seulement si le gars n'est pas connecté
             $jeton = md5(sha1(CLE_SHA_PERSO . time() . rand(0, 15)));
             $_SESSION['jeton'] = $jeton;
             $this->contenu['ub_form'] =
@@ -53,6 +56,7 @@ class Controller {
      * @return bool Retourne true si ca marche et false sinon.
      */
     function afficher_vue($file) {
+        $this->setUserBar();
         $contenu = $this->contenu;
         if (file_exists($file)) {
             require $file;
@@ -75,7 +79,14 @@ class Controller {
         }
     }
 
-    function affiche_erreur($page) {
+    function init_user(){
+        $oUser = new User($_SESSION['id_user']);
+        $this->user = $oUser;
+        return $oUser;
+    }
+
+    function affiche_erreur($page = ERROR_SYS,$debug=false) {
+
         $this->setUserBar();
         $contenu = $this->contenu;
         // gestion du probleme
@@ -86,8 +97,13 @@ class Controller {
             require $page;
         }
     }
+
     function set_error($txt){
         $this->error = $txt;
+    }
+
+    function formatteDate($timestamp){
+        return date("d/m/Y \à H:i",$timestamp);
     }
 
     function prp($array) {
@@ -95,6 +111,7 @@ class Controller {
         print_r($array);
         echo "</pre>";
     }
+
 
 }
 

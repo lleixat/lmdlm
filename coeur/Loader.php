@@ -10,6 +10,8 @@ class Loader {
         $this->dispatcher();
     }
 
+
+
     /**
      * Permet de gerer ce qui va etre chargé ou non
      */
@@ -55,37 +57,57 @@ class Loader {
                 }
 
                 break;
+
             case "full_action":
-                $this->error = "FULL ACTION => pas encore cod&eacute; .. ca va vite venir !!  =)";
-                $this->affiche_erreur(ERROR_SYS);
+                // identifier le controller appelé, verifier si il exite, le charger
+                // l'instancier , verifier si l'action demandée existe et l'appeler en
+                // lui passant les parametres
+
+                $name = ucfirst($this->request->controller).'Controller';
+                $file = CONTROLLER.DS.$name.'.php';
+
+                if(file_exists($file)){
+                    // le fichier existe alors on le charge et on cree l'objet
+                    require $file;
+                    $controller = new $name($this->request);
+
+                    if(method_exists($controller, $this->request->action)){
+
+                        call_user_func_array(array($controller,$this->request->action), $this->request->params);
+
+                    } else {
+                    $this->error = "La methode <b>'{$this->request->action}()'</b> du controller <b>'{$name}()'</b> n'existe pas.";
+                    $this->affiche_erreur(ERROR_SYS,$this->request);
+                }
+                } else {
+                    $this->error = "Le fichier du controller <b>'{$file}'</b>.";
+                    $this->affiche_erreur(ERROR_SYS,$this->request);
+                }
                 break;
         }
     }
 
-    /**
-     * Charge un controlleur dynamiquement
-     * @param string $c nom du controlleur a charger
-     * @return bool booléen qui valide ou non le chargement de l'objet
-     */
-    function charge_controlleur($c) {
 
-    }
+
+
 
     /**
-     * Place un texte d'erreur dans l'attribut qui va bien
+     * Place un texte d'erreur dans l'attribut error
      * @param string $txt texte d'erreur
      */
     function set_error($txt) {
         $this->error = $txt;
     }
 
+
+
     /*
-     * initialise le controller et le charge de gerer l'erreur
+     * instancie Controller() et le charge de gerer l'erreur
      */
-    function affiche_erreur($page) {
+    function affiche_erreur($page,$debug=false) {
         $controller = new Controller($this->request);
         $controller->set_error($this->error);
-        $controller->affiche_erreur($page);
+        $controller->affiche_erreur($page,$debug);
    }
 
 }
