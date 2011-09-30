@@ -17,8 +17,10 @@ class Request {
 
         // si y a pas de path_info c'est qu'on est a la racine
         // donc on redirige vers l'accueil
-        if(!$path_info)
+        if(!$path_info){
             header('Location:http://localhost/lmdlm/accueil.html');
+            exit ();
+        }
 
 
         // on INVERSE le tableau contenant la découpe de l'url
@@ -71,6 +73,10 @@ class Request {
         }
 
         $this->referer = (isset($_SERVER['HTTP_REFERER'])) ? $_SERVER['HTTP_REFERER'] : null;
+    }
+
+    function set_request_type($txt){
+        $this->request_type = $txt;
     }
 
 }

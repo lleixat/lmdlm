@@ -8,6 +8,7 @@
 class User {
 
     private $user;
+    private $user_url;
     private $mail;
     private $first;
     private $last;
@@ -28,6 +29,17 @@ class User {
         $this->promo = $infos->promo;
         $this->image = $infos->image;
         $this->id = $id;
+        $this->user_url = $this->formatrewriting($this->user);
+    }
+
+    function formatrewriting($chaine) {
+        //les accents
+        $chaine = trim($chaine);
+        $chaine = strtr($chaine, "ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ", "aaaaaaaaaaaaooooooooooooeeeeeeeecciiiiiiiiuuuuuuuuynn");
+        //les caracètres spéciaux (aures que lettres et chiffres en fait)
+        $chaine = preg_replace('/([^.a-z0-9]+)/i', '-', $chaine);
+        $chaine = trim($chaine, "-");
+        return $chaine;
     }
 
     public function getUser() {
@@ -86,8 +98,12 @@ class User {
         $this->image = $image;
     }
 
-    function getId(){
+    public function getId() {
         return $this->id;
+    }
+
+    public function getUser_url() {
+        return $this->user_url;
     }
 
 }

@@ -10,69 +10,54 @@ class Loader {
         $this->dispatcher();
     }
 
-
     /**
      * Permet de gerer ce qui va etre chargé ou non
      */
     function dispatcher() {
         switch ($this->request->request_type) {
-            case "statique": // a modifier
-                // on appelle juste la page statique demandée
-                $file = VUES . DS . $this->request->dossier . DS . $this->request->vue;
-                if (file_exists($file)) {
+            case "statique":
+                // on instancie le controller papa et on appelle la page statique voulue
+                $file = VUES .  DS . $this->request->dossier . DS . $this->request->vue;
+                $controller = new Controller($this->request);
 
-                    require $file;
-                    return true;
-                } else {
-                    // on tente avec ".php" si le fichier ".html" n'est pas existant
-                    $file_html = str_replace(".html", ".php", $file);
-                    if (file_exists($file_html)) {
-                        require $file_html;
-                        return true;
-                    } else {
-
-                        $this->set_error("La vue {$file} n'existe pas.");
-                        $this->affiche_erreur();
-                        return false;
-                    }
-                }
+                $controller->afficher_vue($file);
                 break;
+
             case "action":
                 // on va charger dynamiquement le controller qui correspond
                 // et lui lancer la methode (action) demandée en lui donnant
                 // comme arguments request->params qui contient les parametres
                 // post et get (dans ce case précis)
-
-
                 // nom du controller
                 $name = ucfirst($this->request->controller) . "Controller";
                 // fichier physique
                 $file = CONTROLLER . DS . $name . ".php";
                 // existe t il
                 if (file_exists($file)) {
-                    require CONTROLLER . DS . "Controller.php";
+
                     require $file;
                     $obj = new $name($this->request);
                     // la methode souhaitée existe t elle
                     if (method_exists($obj, $this->request->action)) {
                         // on lance la methode de cet objet dynamique
-                        $array_param = (is_array($this->request->params))?$this->request->params:array();
+                        $array_param = (is_array($this->request->params)) ? $this->request->params : array();
 
                         call_user_func_array(array($obj, $this->request->action), $array_param);
                     } else {
                         // methode inexistante
                         $this->error = "La méthode '<b>{$this->request->action}</b>()' n'existe pas dans l'objet '<b>{$name}()</b>'.";
-                        $this->affiche_erreur();
+                        $this->affiche_erreur(ERROR_SYS);
                     }
                 } else {
                     // fichier du controller inexistant
                     $this->error = "Le fichier {$file} n'existe pas";
-                    $this->affiche_erreur();
+                    $this->affiche_erreur(ERROR_SYS);
                 }
 
                 break;
             case "full_action":
-                echo "FULL ACTION => pas encore cod&eacute; .. ca va vite venir !!  =)";
+                $this->error = "FULL ACTION => pas encore cod&eacute; .. ca va vite venir !!  =)";
+                $this->affiche_erreur(ERROR_SYS);
                 break;
         }
     }
@@ -94,15 +79,14 @@ class Loader {
         $this->error = $txt;
     }
 
-    function affiche_erreur() {
-        // gestion du probleme
-        if (MODE == "dev") {
-            $phrase = $this->error;
-            require PAGE_404;
-        } else {
-            require PAGE_404;
-        }
-    }
+    /*
+     * initialise le controller et le charge de gerer l'erreur
+     */
+    function affiche_erreur($page) {
+        $controller = new Controller($this->request);
+        $controller->set_error($this->error);
+        $controller->affiche_erreur($page);
+   }
 
 }
 

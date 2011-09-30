@@ -13,8 +13,6 @@ class UserController extends Controller {
 
             if (isset($_SESSION['jeton']) && $_SESSION['jeton'] == $params['ub_jeton']) {
 
-                require MODEL . DS . "Model.php";
-                require MODEL . DS . "UserModel.php";
                 $user = new UserModel();
 
                 // on verifie dans la base via le UserModel qu'il y a une correspondance
@@ -27,17 +25,18 @@ class UserController extends Controller {
                     $_SESSION['id_user'] = $id_user;
 
                     // retour vers la page d'accueil suite au login
-                    $file = VUES . DS . $this->request->dossier . DS . $this->request->vue;
-                    $this->afficher_vue($file);
+                    header('Location:../accueil.html');
+                    exit;
                 } else {
                     // erreur de login
+                    echo $this->request->set_request_type("error");
                     $this->error = $user->get_error();
-                    $this->affiche_erreur();
+                    $this->affiche_erreur(ERROR_SYS);
                 }
             } else {
                 // error de jeton
                 $this->error = "erreur de jeton";
-                $this->affiche_erreur();
+                $this->affiche_erreur(ERROR_SYS);
             }
         } else {
             // affichage page d'erreur perso
@@ -51,11 +50,6 @@ class UserController extends Controller {
 
         header('Location:../accueil.html');
         exit;
-        /*
-        $file = VUES . DS . $this->request->dossier . DS . $this->request->vue;
-        $this->afficher_vue($file);
-         *
-         */
     }
 
 }

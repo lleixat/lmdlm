@@ -16,7 +16,7 @@ class UserModel extends Model {
         $req->execute();
         $result = $req->fetch(PDO::FETCH_OBJ);
 
-        if($result->id > 0){
+        if(isset($result->id) && $result->id > 0){
             return $result->id;
         } else {
             $this->set_error("Aucune correspondance");
