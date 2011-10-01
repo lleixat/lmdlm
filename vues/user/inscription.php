@@ -34,7 +34,7 @@
                 <h1 class="titre_page">Inscription</h1>
 
 
-                <form action="" id="insc_form" method="post" enctype="multipart/form-data">
+                <form action="user_inscription/accueil.html" id="insc_form" method="post" enctype="multipart/form-data">
                     <div id="cadre_etapes" class="radius20">
                         <div id="translider">
 

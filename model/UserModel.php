@@ -32,7 +32,7 @@ class UserModel extends Model {
     function get_userInfos($id){
 
         // modifier tout ca avec les tables du fichier ConfDB.php
-        
+
         $sql = "SELECT user, mail, image,first
                 inscription , last, u.id, t.nom
                 type_etab , ville, p.nom promo, annee
@@ -55,6 +55,11 @@ class UserModel extends Model {
             return $infos[0];
         else
             return false;
+    }
+
+
+    function enregistrer_new_user(){
+        
     }
 
 }

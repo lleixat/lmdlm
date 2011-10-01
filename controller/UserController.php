@@ -45,6 +45,12 @@ class UserController extends Controller {
         }
     }
 
+
+    /**
+     *
+     * @param int $id l'id du membre a afficher
+     * @return html le html de la page membre
+     */
     function pageMembre($id) {
         // on s'écurise l'id vu qu'il vient de l'extérieur
         $id = intval(filter_var($id, FILTER_SANITIZE_NUMBER_INT));
@@ -81,6 +87,12 @@ class UserController extends Controller {
             $this->affiche_erreur(ERROR_SYS, $this->request->params);
             return false;
         }
+    }
+
+
+    function inscription(){
+        $this->error = "ici il faut recupérér les infos, les filter et si tout est bon, instancier le model userModel, faire une methode qui va envoyer les infos dans la base et rediriger vers la page request->page";
+        $this->affiche_erreur(ERROR_SYS,$this->request);
     }
 
     function deco() {
