@@ -34,7 +34,8 @@ class Model {
                     $this->pdo = self::$connexion;
                 }
             } catch (Exception $e) {
-                die("Ohh ! Plantage du serveur !");
+                echo (MODE == "dev")?$e->getMessage():"";
+                die("<p>Ohh ! Plantage du serveur !</p>");
             };
         } else {
             // conexion pdo déja créé (dans la statique) donc on a juste a aller la chercher

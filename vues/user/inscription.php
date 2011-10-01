@@ -15,6 +15,11 @@
         <script src="js/jquery.easing.1.3.js" type="text/javascript"></script>
         <script src="js/form_inscription.js" type="text/javascript"></script>
 
+        <script type="text/javascript" src="js/jquery-ui.js"></script>
+        <script type="text/javascript" src="js/jquery.ui.touch.js"></script>
+
+        <script type="text/javascript" src="tools/Qaptcha_v3.0/jquery/QapTcha.jquery.js"></script>
+        <link rel="stylesheet" media="screen" href="tools/Qaptcha_v3.0/jquery/QapTcha.jquery.css" />
         <meta name="description" content="<?php echo DESCRIPTION ?>">
     </head>
     <body>
@@ -28,12 +33,12 @@
             <div id="content">
                 <h1 class="titre_page">Inscription</h1>
 
-                <p>faudrai essayer de faire un truc qui slide en transversal ca serai joli</p>
 
-
-                <form action="" id="insc_form">
+                <form action="" id="insc_form" method="post" enctype="multipart/form-data">
                     <div id="cadre_etapes" class="radius20">
                         <div id="translider">
+
+
                             <div id="insc_step1" class="insc_steps">
                                 <h3>Utilisateur - étape 1/4</h3>
                                 <p>
@@ -57,6 +62,9 @@
                                     <input type="button" value="" class="insc_btnSuivant" />
                                 </p>
                             </div>
+
+
+
                             <div id="insc_step2" class="insc_steps">
                                 <h3>Avatar - étape 2/4</h3>
                                 <p>
@@ -68,6 +76,9 @@
                                     <input type="button" value="" class="insc_btnSuivant" />
                                 </p>
                             </div>
+
+
+
                             <div id="insc_step3" class="insc_steps">
                                 <h3>Etablissement -étape 3/4</h3>
                                 <p>
@@ -94,14 +105,20 @@
                                     <input type="button" value="" class="insc_btnSuivant" />
                                 </p>
                             </div>
+
+
+
                             <div id="insc_step4" class="insc_steps">
                                 <h3>Validation - étape finale</h3>
-                                <p>ici un captcha a la con</p>
+                                <div class="QapTcha"></div>
                                 <p>
                                     <input type="button" value="" class="insc_btnPrecedent" />
                                     <input type="submit" value="" id="insc_btn_inscription" />
                                 </p>
                             </div>
+
+
+
                         </div>
                     </div>
 

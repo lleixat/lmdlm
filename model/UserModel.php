@@ -31,7 +31,8 @@ class UserModel extends Model {
      */
     function get_userInfos($id){
 
-        //$sql = "SELECT * FROM " . $this->tables['TABLE_USERS'] . " WHERE id=?";
+        // modifier tout ca avec les tables du fichier ConfDB.php
+        
         $sql = "SELECT user, mail, image,first
                 inscription , last, u.id, t.nom
                 type_etab , ville, p.nom promo, annee
@@ -44,6 +45,7 @@ class UserModel extends Model {
                 )
                 LEFT JOIN type_etab t ON e.type = t.id
                 WHERE u.id =?";
+
         $req = $this->pdo->prepare($sql);
         $req->bindValue(1, $id, PDO::PARAM_INT);
         $req->execute();

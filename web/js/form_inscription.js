@@ -1,4 +1,14 @@
 $(document).ready(function(){
+
+
+
+
+    /*
+     *
+     *   Les glissements de cadres dans le form inscription
+     *
+     */
+
     var etape =1; // etape en cour (ca peut servir plus tard)
     $(".insc_btnSuivant").each(function(i){
         $(this).click(function(){
@@ -9,7 +19,7 @@ $(document).ready(function(){
 
                 $("#translider").stop().animate({
                     left:-glissade+"px"
-                },800,"easeOutQuad");
+                },400,"easeOutQuad");
             }
             // console.log("etape " + etape);
         })
@@ -22,9 +32,17 @@ $(document).ready(function(){
                 var glissade = (i * 540);
                 $("#translider").stop().animate({
                     left:-glissade+"px"
-                },800,"easeOutQuad");
+                },400,"easeOutQuad");
             }
             // console.log("etape " + etape);
         })
     });
+
+
+     /*
+     *
+     *   Le captcha
+     *
+     */
+    $('.QapTcha').QapTcha({disabledSubmit:true,autoRevert:true});
 })

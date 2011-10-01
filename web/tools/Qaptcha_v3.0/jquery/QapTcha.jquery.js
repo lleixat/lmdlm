@@ -34,7 +34,11 @@ jQuery.QapTcha = {
 				inputQapTcha = jQuery('<input>',{name:'iQapTcha',value:generatePass(),type:'hidden'});
 
 			/** Disabled submit button **/
-			if(opts.disabledSubmit) form.find('input[type=\'submit\']').attr('disabled','disabled');
+			if(opts.disabledSubmit){
+                            form.find('input[type=\'submit\']')
+                                .attr('disabled','disabled')
+                                .css({opacity:0.5});
+                        }
 
 			/** Construct DOM **/
 			bgSlider.appendTo($this);
@@ -69,7 +73,7 @@ jQuery.QapTcha = {
 								inputQapTcha.val("");
 								TxtStatus.text(opts.txtUnlock).addClass('dropSuccess').removeClass('dropError');
 								Icons.css('background-position', '-16px 0');
-								form.find('input[type=\'submit\']').removeAttr('disabled');
+								form.find('input[type=\'submit\']').removeAttr('disabled').css({opacity:1});
 							}
 						},'json');
 					}
@@ -88,4 +92,4 @@ jQuery.QapTcha = {
 
 		});
 	}
-}; jQuery.fn.QapTcha = jQuery.QapTcha.build;
+};jQuery.fn.QapTcha = jQuery.QapTcha.build;
