@@ -65,7 +65,7 @@ form#insc_form #insc_btn_inscription{
     cursor: pointer;
     outline: none;
 }
-form#insc_form #insc_btn_inscription:hover{
+form#insc_form #insc_btn_inscription.submit_ok:hover{
     background-position: 0px 0px;
 }
 

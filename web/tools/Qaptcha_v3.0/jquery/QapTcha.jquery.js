@@ -73,7 +73,7 @@ jQuery.QapTcha = {
 								inputQapTcha.val("");
 								TxtStatus.text(opts.txtUnlock).addClass('dropSuccess').removeClass('dropError');
 								Icons.css('background-position', '-16px 0');
-								form.find('input[type=\'submit\']').removeAttr('disabled').css({opacity:1});
+								form.find('input[type=\'submit\']').removeAttr('disabled').css({opacity:1}).addClass("submit_ok");
 							}
 						},'json');
 					}

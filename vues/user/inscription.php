@@ -117,12 +117,13 @@
                                 </p>
                             </div>
 
-
-
                         </div>
                     </div>
 
                 </form>
+                <h3>Note</h3>
+                <p>rajouter une validation de l'étape en cour a chaque click sur suivant</p>
+                <p>Le glissement se fera si la fonction de verif renvoie true, dans le cas contraire le glissement n'aura pas lieux et une edition des champs sera proposée. (le plus casse couille a faire quoi...)</p>
             </div>
 
 
