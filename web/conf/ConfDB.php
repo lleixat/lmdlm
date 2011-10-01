@@ -14,9 +14,9 @@ class ConfDB {
                 "TABLE_USERS" => "users"
         )),
         "distant" => array(
-            "hote" => "sql.free.fr",
-            "base" => "rudak",
-            "user" => "rudak",
+            "hote" => "",
+            "base" => "",
+            "user" => "",
             "pass" => "",
             "tables" => array(
                 "TABLE_ETAB"  => "etab",
