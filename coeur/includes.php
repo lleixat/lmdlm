@@ -1,5 +1,5 @@
 <?php
-require CONF.DS."confDB.php";
+require CONF.DS."ConfDB.php";
 require "Loader.php";
 require "Request.php";
 require CONTROLLER . DS . "Controller.php";

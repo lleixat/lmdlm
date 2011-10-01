@@ -24,7 +24,7 @@ class Model {
         if (!is_object(self::$connexion)) {
 
             // on choppe les infos de config base dans la classe confDB
-            $this->baseConf = ConfDB::$acces['local'];
+            $this->baseConf = ConfDB::$acces[TYPE_ACCES_BASE];
             try {
                 $option = array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"); // force la conection en utf-8
                 self::$connexion = new PDO('mysql:host=' . $this->baseConf['hote'] . ';dbname=' . $this->baseConf['base'], $this->baseConf['user'], $this->baseConf['pass'], $option);

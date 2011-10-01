@@ -18,7 +18,7 @@ class Request {
         // si y a pas de path_info c'est qu'on est a la racine
         // donc on redirige vers l'accueil
         if (!$path_info) {
-            header('Location:http://localhost/lmdlm/accueil.html');
+            header('Location:accueil.html');
             exit();
         }
 
