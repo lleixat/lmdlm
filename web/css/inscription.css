@@ -3,35 +3,96 @@ form#insc_form{
 }
 
 form#insc_form div.insc_steps{
-    background-color: #000000;
+    background-color: #2B89BA;
     width: 500px;
-    height: 240px;
+    height: 300px;
+    padding: 20px;
     float: left;
+    position: relative;
 }
-
-
-
-
+form#insc_form div#cadre_etapes{
+    width: 540px;
+    height: 340px;
+    position: relative;
+    overflow: hidden;
+}
 
 form#insc_form #translider{
     width: 2500px;
-    height: 240px;
+    height: 340px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
 }
-form#insc_form{
 
+form#insc_form input.insc_btnPrecedent{
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+    width: 198px;
+    height: 60px;
+    border: none;
+    background: transparent url(../imgs/btn_spriteInsc.png) 0px -60px no-repeat;
+    cursor: pointer;
+    outline: none;
 }
-form#insc_form{
+form#insc_form input.insc_btnPrecedent:hover{
+    background-position: 0px 0px;
+}
+form#insc_form input.insc_btnSuivant{
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    width: 198px;
+    height: 60px;
+    border: none;
+    background: transparent url(../imgs/btn_spriteInsc.png) 0px -180px no-repeat;
+    cursor: pointer;
+    outline: none;
+}
+form#insc_form input.insc_btnSuivant:hover{
+    background-position: 0px -120px;
+}
 
+form#insc_form #insc_btn_inscription{
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    width: 198px;
+    height: 60px;
+    border: none;
+    background: transparent url(../imgs/btn_submit_inc.png) 0px -60px no-repeat;
+    cursor: pointer;
+    outline: none;
 }
-form#insc_form{
+form#insc_form #insc_btn_inscription:hover{
+    background-position: 0px 0px;
+}
 
+form#insc_form label{
+    width: 200px;
+    display: inline-block;
+    text-align: right;
+    margin-right: 20px;
 }
-form#insc_form{
+form#insc_form input[type=text],
+form#insc_form input[type=password]{
+    border: none;
+    text-align: center;
+    background-color: #287CA8;
 
-}
-form#insc_form{
+    width: 200px;
+    height: 25px;
+    line-height: 25px;
+    color: #ADE0E0;
+    font-weight: bold;
+    font-size: 1.1em;
 
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
 }
+
 form#insc_form{
 
 }
