@@ -84,11 +84,12 @@
                                 <p>
                                     <label for="insc_type_etab">Type d'établissement</label>
                                     <select name="insc_type_etab" id="insc_type_etab">
-                                        <option value="4">Faculté</option>
-                                        <option value="3">Lycée</option>
-                                        <option value="2">Collège</option>
-                                        <option value="1">Ecole primaire</option>
-                                        <option value="0">Educ spé primates</option>
+                                        <option value="0" disabled="disabled" selected="selected">Choisir établissement</option>
+                                        <option value="1">Faculté</option>
+                                        <option value="2">Lycée</option>
+                                        <option value="3">Collège</option>
+                                        <option value="4">Ecole primaire</option>
+                                        <option value="5">Educ spé primates</option>
                                     </select>
                                 </p>
                                 <p>
@@ -110,7 +111,10 @@
 
                             <div id="insc_step4" class="insc_steps">
                                 <h3>Validation - étape finale</h3>
-                                <div class="QapTcha"></div>
+                                <div id="cadre_captcha">
+                                    <div class="QapTcha"></div>
+                                </div>
+
                                 <p>
                                     <input type="button" value="" class="insc_btnPrecedent" />
                                     <input type="submit" value="" id="insc_btn_inscription" />
@@ -122,8 +126,11 @@
 
                 </form>
                 <h3>Note</h3>
-                <p>rajouter une validation de l'étape en cour a chaque click sur suivant</p>
-                <p>Le glissement se fera si la fonction de verif renvoie true, dans le cas contraire le glissement n'aura pas lieux et une edition des champs sera proposée. (le plus casse couille a faire quoi...)</p>
+                <p>Ajouter loader pour autorisation déblocage apres glissement</p>
+                <p>ajouter loader pendant upload du formulaire</p>
+                <p>enregistrement info sensées etres correctes en local storage pour les remettre si le serveur refuse une ou plusieur cases (ne pas se fier au JS pour la sécu)</p>
+                <p>Ajouter un systeme de signalement des champs mal renseignés</p>
+                <p>Ajouter ce texte dans le broyeur de l'objet form</p>
             </div>
 
 

@@ -88,6 +88,11 @@ class Request {
             $this->params['post'] = $_POST;
         }
 
+        // $_FILES
+        if(isset($_FILES) && count($_FILES) > 0){
+            $this->params['files'] = $_FILES;
+        }
+
         $this->referer = (isset($_SERVER['HTTP_REFERER'])) ? $_SERVER['HTTP_REFERER'] : null;
     }
 

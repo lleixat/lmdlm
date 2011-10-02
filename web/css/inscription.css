@@ -94,9 +94,11 @@ form#insc_form input[type=password]{
 }
 
 
-form#insc_form{
-
+form#insc_form div#cadre_captcha{
+    height: 100px;
+    width: 356px;
+    margin: 20px auto;
+    background: transparent url(../imgs/fond_slide_insc.jpg) left top no-repeat;
+    padding-top: 54px;
 }
-form#insc_form{
 
-}

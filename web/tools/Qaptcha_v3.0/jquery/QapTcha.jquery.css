@@ -3,9 +3,8 @@
 /*****************/
 .QapTcha {
 	padding:10px;
-	border:1px solid #F4F4F4;
-	background:url('../images/bg_QapTcha.png') repeat;
-	margin-top:10px;
+	margin:0 auto;
+        width: 230px;
 }
 .QapTcha .clr{clear:both}
 
@@ -33,11 +32,10 @@
 }
 
 .QapTcha #TxtStatus {
-	width:202px;
 	margin-top:7px;
 	text-align:center;
 	font-family:Verdana;
-	font-size:10px;
+	font-size:12px;
 	clear:both
 }
 
