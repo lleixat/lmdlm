@@ -17,37 +17,6 @@ class Controller {
         $this->request = $request;
     }
 
-    function setUserBar() {
-        // le gars est til connecté
-        if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
-            // oui alors on cree un objet user
-            $oUser = $this->init_user();
-
-            $html = "<p>Connecté en tant que ";
-            $html .= "<a href='user_pageMembre/{$oUser->getId()}/user_{$oUser->getUser_url()}.html' class='ub_liens'>{$oUser->getUser()}</a> ";
-            $html .= "<a href='user_deco/accueil.html' class='ub_liens' style='margin-left:20px'>Deconnexion</a></p>";
-
-            $this->contenu['ub_texte'] = $html;
-            $this->contenu['logged'] = true;
-
-        } else{
-            // Seulement si le gars n'est pas connecté
-            $jeton = md5(sha1(CLE_SHA_PERSO . time() . rand(0, 15)));
-            $_SESSION['jeton'] = $jeton;
-            $this->contenu['ub_form'] =
-                "<form action='user_login/accueil.php' method='post' id='forum_ub'>
-                    <p>
-                        <input type='hidden' name='ub_jeton' value='{$jeton}' />
-                        <label for='ub_user'>User : </label>
-                        <input type='text' name='ub_user' id='ub_user' class='radius5' />
-                        <label for='ub_pass'>Mdp : </label>
-                        <input type='password' name='ub_pass' id='ub_pass' class='radius5' />
-                        <input type='submit' value='' id='ub_submit' />
-                    </p>
-                </form>";
-            $this->contenu['logged'] = false;
-        }
-    }
 
     /**
      * Methode qui permet d'afficher une vue demandée
@@ -56,7 +25,6 @@ class Controller {
      * @return bool Retourne true si ca marche et false sinon.
      */
     function afficher_vue($file) {
-        $this->setUserBar();
         $contenu = $this->contenu;
         if (file_exists($file)) {
             require $file;
@@ -79,15 +47,9 @@ class Controller {
         }
     }
 
-    function init_user(){
-        $oUser = new User($_SESSION['id_user']);
-        $this->user = $oUser;
-        return $oUser;
-    }
-
     function affiche_erreur($page = ERROR_SYS,$debug=false) {
 
-        $this->setUserBar();
+
         $contenu = $this->contenu;
         // gestion du probleme
         if (MODE == "dev") {
