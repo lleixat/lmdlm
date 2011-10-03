@@ -1,8 +1,5 @@
 $(document).ready(function(){
 
-
-
-
     /*
      *
      *   Les glissements de cadres dans le form inscription
@@ -115,10 +112,14 @@ $(document).ready(function(){
                 return true;
             }
         },
+        init_element : function(elem){
+            $(elem).removeAttr("style");
+        },
         broyeur : function(obj){
 
             var element = document.getElementById(obj.id);
             var error_element = this.error_verif;
+            this.init_element(element);
 
             switch(obj.type){
                 case "texte":
@@ -163,7 +164,7 @@ $(document).ready(function(){
         signal : function(id){
             this.debug && console.log("     signaler : " + id);
             var element = document.getElementById(id);
-            $(element).addClass("border_error");
+            $(element).animate({backgroundColor:"#04598F"},200);
         }
     }
 

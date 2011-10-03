@@ -92,7 +92,9 @@ form#insc_form input[type=password]{
     -moz-border-radius: 5px;
     border-radius: 5px;
 }
-
+form#insc_form .erreur{
+    border: 1px solid #0000cc;
+}
 
 form#insc_form div#cadre_captcha{
     height: 100px;

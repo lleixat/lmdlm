@@ -15,7 +15,7 @@
         <script src="js/jquery.easing.1.3.js" type="text/javascript"></script>
         <script src="js/form_inscription.js" type="text/javascript"></script>
 
-        <script type="text/javascript" src="js/jquery-ui.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
         <script type="text/javascript" src="js/jquery.ui.touch.js"></script>
 
         <script type="text/javascript" src="tools/Qaptcha_v3.0/jquery/QapTcha.jquery.js"></script>
