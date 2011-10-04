@@ -5,6 +5,7 @@ la dedans on place juste les vues.
 
 #les dossiers :
 
+
 system : les pages système (erreurs diverses,404 etc).
          et tous les truc qui changent jamais (header, footer etc..)
 
