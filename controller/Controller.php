@@ -13,8 +13,10 @@ class Controller {
     protected $error;
     public    $user;
 
-    function __construct($request) {
-        $this->request = $request;
+    function __construct($request = false) {
+        if(!isset($this->request) && $request !== false){
+            $this->request = $request;
+        }
     }
 
 
@@ -64,8 +66,21 @@ class Controller {
         $this->error = $txt;
     }
 
-    function formatteDate($timestamp){
-        return date("d/m/Y \à H:i",$timestamp);
+    function formatteDate($t) {
+        /**
+         *      renvoie une date en fonction d'aujourd'hui
+         *      Hier, avant hier, le 14/04/1984
+         */
+        $minuit = mktime(0, 0, 0, date("m"), date("d"), date("Y"));
+        $minuit_hier = $minuit - (3600 * 24);
+        if ($t >= $minuit) {
+            $date = "aujourd'hui à " . date("H:i:s", $t);
+        } else if ($t >= $minuit_hier) {
+            $date = "hier à " . date("H:i:s", $t);
+        } else {
+            $date = "le " . date("d/m/Y \à H:i:s", $t);
+        };
+        return $date;
     }
 
     function prp($array) {
@@ -85,12 +100,6 @@ class Controller {
  * pouvoir réellement permuter les extensions et non pas remplacer .html par .php
  * (si c un fichier .php on ne remplacera rien sinon)
  * ligne 34 en principe
- *
- * affiche erreur()
- * pouvoir passer en argument le type de page d'erreur a afficher
- * page404 ou page erreur simple ou page erreur systeme
- * rapidement avant d'avoir trop d'appels a modifier un peu partout
- * et risquer d'en oublier..
  *
  *
  */
