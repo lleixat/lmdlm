@@ -45,7 +45,6 @@ class UserController extends Controller {
         }
     }
 
-
     /**
      *
      * @param int $id l'id du membre a afficher
@@ -78,9 +77,9 @@ class UserController extends Controller {
                 $file = VUES . DS . $this->request->dossier . DS . "page-membre.html";
                 $this->afficher_vue($file);
             } else {
-            $this->error = "Aucun membre avec cette id ({$id})";
-            $this->affiche_erreur(ERROR_SYS, $this->request->params);
-            return false;
+                $this->error = "Aucun membre avec cette id ({$id})";
+                $this->affiche_erreur(ERROR_SYS, $this->request->params);
+                return false;
             }
         } else {
             $this->error = "Probleme avec le parametre $id";
@@ -89,27 +88,50 @@ class UserController extends Controller {
         }
     }
 
+    function inscription($p, $file) {
 
-    function inscription($p,$file){
-        $this->error = "ici il faut recupérér les infos, les filter et si tout est bon, instancier le model userModel, faire une methode qui va envoyer les infos dans la base et rediriger vers la page request->page";
-        $this->affiche_erreur(ERROR_SYS,$file);
-
-        if(strlen($p['insc_user']) >= 3 && strlen($p['insc_user']) <= 40){
-            if(strlen($p['insc_pass']) >= 6 && strlen($p['insc_pass']) <= 17){
-                if($p['insc_pass'] == $p['insc_pass2']){
-                    if(filter_var($p['insc_mail'],FILTER_VALIDATE_EMAIL)){
-                        if($p['insc_type_etab'] > 0){
-                            if(strlen($p['insc_ville_etab']) > 0){
-                                if(strlen($p['insc_promo_etab']) > 0){
-                                    if(empty($p['iQapTcha'])&& isset($_SESSION['iQaptcha']) && $_SESSION['iQaptcha']){
+        if (strlen($p['insc_user']) >= 3 && strlen($p['insc_user']) <= 40) {
+            if (strlen($p['insc_pass']) >= 6 && strlen($p['insc_pass']) <= 17) {
+                if ($p['insc_pass'] == $p['insc_pass2']) {
+                    if (filter_var($p['insc_mail'], FILTER_VALIDATE_EMAIL)) {
+                        if ($p['insc_type_etab'] > 0) {
+                            if (strlen($p['insc_ville_etab']) > 0) {
+                                if (strlen($p['insc_promo_etab']) > 0) {
+                                    if (empty($p['iQapTcha']) && isset($_SESSION['iQaptcha']) && $_SESSION['iQaptcha']) {
 
                                         // les infos ont l'air bonnes
-
                                         // on upload le fichier image et si ca se passe
                                         // bien on rentre tout dans la base
 
                                         $f = $file['insc_avatar'];
+                                        require CONTROLLER . DS . 'FileController.php';
+                                        $fileController = new FileController();
 
+                                        if ($fileController->upload_fichier($f, array("image/jpeg"))) {
+                                            // le fichier a été uploadé comme il faut
+                                            // on peut lancer l'inscription dans la base
+                                            // on recupere le nom de l'image qui a été créé
+                                            $p['insc_image'] = $fileController->nouveau_nom;
+
+                                            $userModel = new UserModel();
+                                            $id = $userModel->enregistrer_new_user($p);
+
+                                            if ($id !== false && $id > 0) {
+                                                
+                                                $_SESSION['login'] = true;
+                                                $_SESSION['id_user'] = $id;
+                                                
+                                                
+                                                /* redirection a revoir plus tard
+                                                 * vers une page qui lui dit de valider le mail avant 48heures
+                                                 */
+                                                
+                                                header('Location:../accueil.html');
+                                            }
+
+                                        } else {
+                                            $this->affiche_erreur(ERROR_SYS);
+                                        }
                                     } else {
                                         // probleme de captcha
                                     }
@@ -144,5 +166,8 @@ class UserController extends Controller {
     }
 
 }
+
+#todo => faire systeme d'envoi du mail de confirmation du compte
+#todo => ajouter table comptes confirmés ou pas et faire un truc pour que le mec valide son mail
 
 ?>

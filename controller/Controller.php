@@ -11,7 +11,6 @@ class Controller {
 
     protected $contenu = array();
     protected $error;
-    public    $user;
 
     function __construct($request = false) {
         if(!isset($this->request) && $request !== false){
@@ -88,7 +87,6 @@ class Controller {
         print_r($array);
         echo "</pre>";
     }
-
 
 }
 

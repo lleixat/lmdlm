@@ -1,5 +1,10 @@
-<?php ?>
-<?php ?>
+<?php
+$um = new UserModel();
+$liste = $um->get_type_etab();
+$opt = "";
+$mdl_opt = "<option value='%d'>%s</option>\n";
+foreach ($liste as $type){$opt .= sprintf($mdl_opt,$type->id,$type->nom);}?>
+
 <!DOCTYPE html>
 
 <html lang="fr">
@@ -85,11 +90,9 @@
                                     <label for="insc_type_etab">Type d'établissement</label>
                                     <select name="insc_type_etab" id="insc_type_etab">
                                         <option value="0" disabled="disabled" selected="selected">Choisir établissement</option>
-                                        <option value="1">Faculté</option>
-                                        <option value="2">Lycée</option>
-                                        <option value="3">Collège</option>
-                                        <option value="4">Ecole primaire</option>
-                                        <option value="5">Educ spé primates</option>
+                                        <?php
+                                        echo $opt;
+                                        ?>
                                     </select>
                                 </p>
                                 <p>

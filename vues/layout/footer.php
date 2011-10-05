@@ -1,6 +1,6 @@
-<?php
 
-?>
 <footer>
-    
+    <pre>
+
+    </pre>
 </footer>
