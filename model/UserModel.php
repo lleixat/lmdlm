@@ -38,12 +38,12 @@ class UserModel extends Model {
                 type_etab , ville, p.nom promo, annee
                 FROM (
                 (
-                users u
-                LEFT JOIN etab e ON u.etab = e.id
+                ".$this->tables['TABLE_USERS']." u
+                LEFT JOIN ".$this->tables['TABLE_ETAB']." e ON u.etab = e.id
                 )
-                LEFT JOIN promo p ON u.promo = p.id
+                LEFT JOIN ".$this->tables['TABLE_PROMO']." p ON u.promo = p.id
                 )
-                LEFT JOIN type_etab t ON e.type = t.id
+                LEFT JOIN ".$this->tables['TABLE_TYPE_ETAB']." t ON e.type = t.id
                 WHERE u.id =?";
 
         $req = $this->pdo->prepare($sql);
@@ -62,7 +62,7 @@ class UserModel extends Model {
         if($i === false)
             return FALSE;
         
-        $sql_etab = "INSERT INTO etab VALUES (?, ?, NULL)";
+        $sql_etab = "INSERT INTO ".$this->tables['TABLE_ETAB']." VALUES (?, ?, NULL)";
         $req = $this->pdo->prepare($sql_etab);
         $req->bindValue(1, $i['insc_type_etab'], PDO::PARAM_INT);
         $req->bindValue(2, $i['insc_ville_etab'], PDO::PARAM_STR);
@@ -70,7 +70,7 @@ class UserModel extends Model {
         $id_etab = $this->pdo->lastInsertId();
         $req->closeCursor();
                 
-        $sql_promo = "INSERT INTO promo VALUES (?,?,?,NULL)";
+        $sql_promo = "INSERT INTO ".$this->tables['TABLE_PROMO']." VALUES (?,?,?,NULL)";
         $req = $this->pdo->prepare($sql_promo);
         $req->bindValue(1, $i['insc_promo_etab'], PDO::PARAM_STR);
         $req->bindValue(2, date("Y",time()), PDO::PARAM_INT);
@@ -79,7 +79,7 @@ class UserModel extends Model {
         $id_promo = $this->pdo->lastInsertId();
         $req->closeCursor();
         
-        $sql_user = "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?, ?, NULL)";
+        $sql_user = "INSERT INTO ".$this->tables['TABLE_USERS']." VALUES (?, ?, ?, ?, ?, ?, ?, ?, NULL)";
         $req = $this->pdo->prepare($sql_user);
         $req->bindValue(1, $i['insc_user'],  PDO::PARAM_STR);
         $req->bindValue(2, sha1($i['insc_pass'] . CLE_SHA_PERSO), PDO::PARAM_STR);
@@ -98,7 +98,7 @@ class UserModel extends Model {
     }
     
     function get_type_etab(){
-        $sql = "SELECT * FROM type_etab";
+        $sql = "SELECT * FROM ".$this->tables['TABLE_TYPE_ETAB']."";
         return $this->pdo->query($sql)->fetchAll(PDO::FETCH_OBJ);
     }
 

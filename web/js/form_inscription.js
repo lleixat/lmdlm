@@ -81,10 +81,8 @@ $(document).ready(function(){
         },
         etape_precedente : function(){
             if(this.etape > 1){
-                if(this.verif()){
                     this.etape--;
                     this.glissement();
-                }
             }
         },
         glissement : function(){

@@ -41,7 +41,7 @@ class Model {
             // conexion pdo déja créé (dans la statique) donc on a juste a aller la chercher
             $this->pdo = self::$connexion;
         }
-        $this->tables = ConfDB::$acces['local']['tables'];
+        $this->tables = ConfDB::$acces[TYPE_ACCES_BASE]['tables'];
     }
 
     function set_error($txt) {

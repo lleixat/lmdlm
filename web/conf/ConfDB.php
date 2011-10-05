@@ -11,7 +11,8 @@ class ConfDB {
             "tables" => array(
                 "TABLE_ETAB"  => "etab",
                 "TABLE_PROMO" => "promo",
-                "TABLE_USERS" => "users"
+                "TABLE_USERS" => "users",
+                "TABLE_TYPE_ETAB" => "type_etab"
         )),
         "distant" => array(
             "hote" => "",
