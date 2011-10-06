@@ -2,6 +2,10 @@
 
 class MotController extends Controller {
 
+    /**
+     *  enregistre un mot et affiche la liste de mots que le gars a déja proposé
+     * @param string $p le mot proposé
+     */
     function proposer($p) {
 
         $jeton = $p['pm_jeton'];
@@ -31,6 +35,10 @@ class MotController extends Controller {
         $this->afficher_vue($file);
     }
 
+    /**
+     *  cree le contenu (la liste de mots déja envoyée)
+     *  et envoie la page de proposition de mot
+     */    
     function afficher() {
         require MODEL . DS . 'MotModel.php';
         $mm = new MotModel;
@@ -54,6 +62,26 @@ class MotController extends Controller {
         $this->afficher_vue($file);
     }
 
+    /**
+     *  assigne un mot au gars pour la journée
+     */
+    function obtenir(){
+        require MODEL . DS . 'MotModel.php';
+        $mm = new MotModel;
+
+        $objmot = $mm->assigne_mot();
+  
+        //$this->prp($objmot);
+                
+        $mot_today = "";
+        $mot_today.= "<p>Aujourd'hui, jour {$objmot->jour} de l'an {$objmot->annee}, 
+                    votre mot est : <b>{$objmot->mot}</b>.</p>";
+        
+        $this->contenu['mot_today'] = $mot_today;
+        
+        $file = VUES . DS . "static" . DS . "le-mot-du-jour.html";
+        $this->afficher_vue($file);
+    }
 }
 
 ?>

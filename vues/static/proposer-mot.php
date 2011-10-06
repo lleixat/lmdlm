@@ -37,7 +37,7 @@ $c = $this->contenu['liste_mots_user'];
             require LAYOUT_NAV;
             ?>
 
-            <din id="content">
+            <div id="content">
                 <h1 class="titre_page">proposer un mot</h1>
                 <div class="cadre_bleu radius10" >
                     <form action="mot_proposer/proposer-mot.html" enctype="multipart/form-data" 
@@ -56,7 +56,7 @@ $c = $this->contenu['liste_mots_user'];
                 ?>
 
 
-            </din>
+            </div>
 
 
 

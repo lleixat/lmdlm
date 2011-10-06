@@ -3,7 +3,7 @@
     <a href="accueil.html" class="radius5">Accueil</a>
     <?php
     if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
-        echo '<a href="je-joue.html" class="radius5">Jouer !</a>';
+        echo '<a href="mot_obtenir/le-mot-du-jour.html" class="radius5">participer !</a>';
     } else {
         echo '<a href="user_inscription.html" class="radius5">Inscription</a>';
     }
