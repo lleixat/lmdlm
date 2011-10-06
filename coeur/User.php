@@ -16,6 +16,7 @@ class User {
     static $promo;
     static $image;
     static $id;
+    static $rang;
 
     function __construct($id = false) {
         if($id == false)
@@ -29,6 +30,7 @@ class User {
         self::$etab = $infos->type_etab;
         self::$promo = $infos->promo;
         self::$image = $infos->image;
+        self::$rang = $infos->rang;
         self::$id = $id;
         self::$user_url = $this->formatrewriting(self::$user);
     }

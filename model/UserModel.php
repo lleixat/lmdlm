@@ -33,7 +33,7 @@ class UserModel extends Model {
 
         // modifier tout ca avec les tables du fichier ConfDB.php
 
-        $sql = "SELECT user, mail, image,first
+        $sql = "SELECT user, mail, image, rang, first
                 inscription , last, u.id, t.nom
                 type_etab , ville, p.nom promo, annee
                 FROM (
@@ -79,7 +79,7 @@ class UserModel extends Model {
         $id_promo = $this->pdo->lastInsertId();
         $req->closeCursor();
         
-        $sql_user = "INSERT INTO ".$this->tables['TABLE_USERS']." VALUES (?, ?, ?, ?, ?, ?, ?, ?, NULL)";
+        $sql_user = "INSERT INTO ".$this->tables['TABLE_USERS']." VALUES (?, ?, ?, ?,0, ?, ?, ?, ?, NULL)";
         $req = $this->pdo->prepare($sql_user);
         $req->bindValue(1, $i['insc_user'],  PDO::PARAM_STR);
         $req->bindValue(2, sha1($i['insc_pass'] . CLE_SHA_PERSO), PDO::PARAM_STR);
