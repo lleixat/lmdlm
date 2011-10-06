@@ -87,6 +87,38 @@ class UserController extends Controller {
             return false;
         }
     }
+    
+    /**
+     * cette fonction va chercher la liste des membres via le usermodel et cree le html a mettre
+     *  dans la page puis appelle la page
+     */
+    function listeMembres(){
+        $um = new UserModel;
+        $list_all = $um->liste_des_membres();
+        $list_unv = $um->liste_des_membres(false);
+        $id_unv = array();
+        // on garde juste les id des mecs non validés pour comparer
+        foreach($list_unv as $membre_unv){
+            $id_unv[] = $membre_unv->user_id;
+        }
+        
+        // modele ligne membre
+        $mlm = "<p><a href='user_pageMembre/%d/user_%s.html' class='lien_membre'>%s</a> inscrit le ";
+        $mlm.= "<span class='date_insc'>%s</span> ";
+        $mlm.= "<img src='%s' alt='validation du compte' style='vertical-align: middle;' /></p>\n";
+        
+        // contenu html
+        $html = "";
+        
+        foreach($list_all as $membre){
+            $image = (in_array($membre->id, $id_unv))?"imgs/nonvalide.png":"imgs/valide.png";
+            $urlUser = $this->formatrewriting($membre->user);
+            $html .= sprintf($mlm,$membre->id,$urlUser,$membre->user,date('d/m/Y',$membre->inscription),$image);
+        }
+        $this->contenu['liste_membre_html'] = $html;
+        $file = VUES.DS."user".DS."liste-membre.php";
+        $this->afficher_vue($file);
+    }
 
     function inscription($p, $file) {
 
@@ -118,43 +150,65 @@ class UserController extends Controller {
 
                                             if ($id !== false && $id > 0) {
                                                 
+                                                // on renseigne la table unvalidated_user
+                                                $clef = md5($id).md5($p['insc_mail']).md5("lemodlamort");
+                                                $clef = sha1($clef);
+                                                $userModel->ajoute_unvalidated_user($id,$clef);
+
                                                 $_SESSION['login'] = true;
                                                 $_SESSION['id_user'] = $id;
-                                                
-                                                
+
+
                                                 /* redirection a revoir plus tard
                                                  * vers une page qui lui dit de valider le mail avant 48heures
                                                  */
-                                                
-                                                header('Location:../accueil.html');
-                                            }
 
+                                                header('Location:../user_juste-inscrit.html');
+                                                exit;
+                                            }
                                         } else {
+                                            $this->error = "Echec du déplacement du fichier tmp.";
                                             $this->affiche_erreur(ERROR_SYS);
                                         }
                                     } else {
                                         // probleme de captcha
+                                        $this->error = "Erreur de captcha.";
+                                        $this->affiche_erreur(ERROR_SYS);
                                     }
                                 } else {
                                     // mauvaise promo
+                                    $this->error = "Promotion incorrecte.";
+                                    $this->affiche_erreur(ERROR_SYS);
                                 }
                             } else {
                                 // mauvaise ville
+                                $this->error = "Ville incorrecte.";
+                                $this->affiche_erreur(ERROR_SYS);
                             }
                         } else {
                             // mauvais type d'etablissement
+                            $this->error = "Type d'établissement incorrect.";
+                            $this->affiche_erreur(ERROR_SYS);
                         }
                     } else {
                         // mail incorrect
+                        $this->error = "Mail incorrect.";
+                        $this->affiche_erreur(ERROR_SYS);
                     }
                 } else {
                     // erreur simmilarité de la confirmation du mdp
+                    $this->error = "Confirmation du mot de passe incorrecte.";
+                    $this->affiche_erreur(ERROR_SYS);
                 }
             } else {
                 // erreur taille pass
+                $this->error = "Taille du mot de passe incorrecte.";
+                $this->affiche_erreur(ERROR_SYS);
             }
         } else {
             // erreur taille pseudo
+            $this->error = "Taille du pseudo incorrecte.";
+            $this->affiche_erreur(ERROR_SYS);
         }
     }
 
@@ -169,5 +223,4 @@ class UserController extends Controller {
 
 #todo => faire systeme d'envoi du mail de confirmation du compte
 #todo => ajouter table comptes confirmés ou pas et faire un truc pour que le mec valide son mail
-
 ?>

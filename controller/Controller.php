@@ -13,11 +13,10 @@ class Controller {
     protected $error;
 
     function __construct($request = false) {
-        if(!isset($this->request) && $request !== false){
+        if (!isset($this->request) && $request !== false) {
             $this->request = $request;
         }
     }
-
 
     /**
      * Methode qui permet d'afficher une vue demandée
@@ -48,7 +47,7 @@ class Controller {
         }
     }
 
-    function affiche_erreur($page = ERROR_SYS,$debug=false) {
+    function affiche_erreur($page = ERROR_SYS, $debug=false) {
 
 
         $contenu = $this->contenu;
@@ -61,7 +60,7 @@ class Controller {
         }
     }
 
-    function set_error($txt){
+    function set_error($txt) {
         $this->error = $txt;
     }
 
@@ -80,6 +79,16 @@ class Controller {
             $date = "le " . date("d/m/Y \à H:i:s", $t);
         };
         return $date;
+    }
+
+    function formatrewriting($chaine) {
+        //les accents
+        $chaine = trim($chaine);
+        $chaine = strtr($chaine, "ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ", "aaaaaaaaaaaaooooooooooooeeeeeeeecciiiiiiiiuuuuuuuuynn");
+        //les caracètres spéciaux (aures que lettres et chiffres en fait)
+        $chaine = preg_replace('/([^.a-z0-9]+)/i', '-', $chaine);
+        $chaine = trim($chaine, "-");
+        return $chaine;
     }
 
     function prp($array) {

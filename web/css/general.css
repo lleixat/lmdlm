@@ -107,3 +107,9 @@ footer{
     height: 200px;
     background: #077bb4 url(../imgs/footer.jpg) left top no-repeat;
 }
+
+div.cadre_bleu{
+    background-color: #2B89BA;
+    padding: 20px;
+    margin-right: 15px;
+}

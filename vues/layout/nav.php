@@ -4,7 +4,7 @@
 <nav>
     <a href="accueil.html" class="radius5">Accueil</a>
     <a href="user_inscription.html" class="radius5">Inscription</a>
-    <a href="#" class="radius5">Membres</a>
+    <a href="user_listeMembres/la-liste-des-membres.html" class="radius5">Membres</a>
     <a href="#" class="radius5">Top Scores</a>
     <a href="#" class="radius5">Proposer mot</a>
     <a href="version.html#reglement" class="radius5">Règlement</a>

@@ -94,14 +94,48 @@ class UserModel extends Model {
         $req->closeCursor();
         
         return $id_user;
-
     }
     
+    function ajoute_unvalidated_user($id,$clef){
+        $sql = "INSERT INTO ".$this->tables['TABLE_UNVALIDATED_USER']." VALUES (?,?,?,NULL)";
+        $req = $this->pdo->prepare($sql);
+        
+        $req->bindValue(1,$id,  PDO::PARAM_INT);
+        $req->bindValue(2,$clef,PDO::PARAM_STR);
+        $req->bindValue(3,(time() + 24*3600), PDO::PARAM_INT);
+        $req->execute();
+        return true;
+    }
+    
+    /**
+     *
+     * @return array renvoie les types d'etablissements
+     */
     function get_type_etab(){
         $sql = "SELECT * FROM ".$this->tables['TABLE_TYPE_ETAB']."";
         return $this->pdo->query($sql)->fetchAll(PDO::FETCH_OBJ);
     }
 
+    function liste_des_membres($valide = true){
+        if($valide === true){
+        $sql = "SELECT user, mail, image,first
+                inscription , last, u.id, t.nom
+                type_etab , ville, p.nom promo, annee
+                FROM (
+                (
+                ".$this->tables['TABLE_USERS']." u
+                LEFT JOIN ".$this->tables['TABLE_ETAB']." e ON u.etab = e.id
+                )
+                LEFT JOIN ".$this->tables['TABLE_PROMO']." p ON u.promo = p.id
+                )
+                LEFT JOIN ".$this->tables['TABLE_TYPE_ETAB']." t ON e.type = t.id
+                    ORDER BY u.id DESC";
+        } else {
+            $sql = "SELECT * FROM ".$this->tables['TABLE_UNVALIDATED_USER'];
+        }
+        return $this->pdo->query($sql)->fetchAll(PDO::FETCH_OBJ);
+        
+    }
 }
 
 ?>
