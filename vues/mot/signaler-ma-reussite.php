@@ -1,6 +1,3 @@
-<?php
-$c = $this->contenu['mot_today'];
-?>
 <!DOCTYPE html>
 
 <html lang="fr">
@@ -15,8 +12,24 @@ $c = $this->contenu['mot_today'];
 
         <meta name="description" content="<?php echo DESCRIPTION ?>">
         <style type="text/css">
-
-
+            @import url(http://fonts.googleapis.com/css?family=Schoolbell);
+            textarea{
+                width: 600px;
+                height: 60px;
+                padding: 10px;
+                resize : none;
+                color: #ADE0E0;
+                background-color: #056DA0;
+                border: none;
+                margin: auto;
+                display: block;
+            }
+            div.bigbig{
+                font-family: 'Schoolbell', cursive;
+                font-size: 2.5em;
+                text-align: center;
+                font-weight: bold;
+            }
         </style>
     </head>
     <body>
@@ -28,11 +41,15 @@ $c = $this->contenu['mot_today'];
             ?>
 
             <div id="content">
-                <h1 class="titre_page">Le mot du jour</h1>
+                <h1 class="titre_page">Vous avez réussi ?</h1>
                 <div class="cadre_bleu radius10">
+                    
                     <?php
-                        echo $c;
+                    echo $this->contenu['phrase'];
+                    echo $this->contenu['form'];
                     ?>
+
+
                 </div>
             </div>
             <?php

@@ -40,7 +40,7 @@ class Controller {
                 return true;
             } else {
                 $this->set_error("La vue {$file} n'existe pas.");
-                $this->affiche_erreur();
+                $this->affiche_erreur(PAGE_404);
 
                 return false;
             }
@@ -72,11 +72,11 @@ class Controller {
         $minuit = mktime(0, 0, 0, date("m"), date("d"), date("Y"));
         $minuit_hier = $minuit - (3600 * 24);
         if ($t >= $minuit) {
-            $date = "aujourd'hui à " . date("H:i:s", $t);
+            $date = "aujourd'hui à " . date("H:i", $t);
         } else if ($t >= $minuit_hier) {
-            $date = "hier à " . date("H:i:s", $t);
+            $date = "hier à " . date("H:i", $t);
         } else {
-            $date = "le " . date("d/m/Y \à H:i:s", $t);
+            $date = "le " . date("d/m/Y \à H:i", $t);
         };
         return $date;
     }

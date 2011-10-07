@@ -33,6 +33,9 @@ class User {
         self::$rang = $infos->rang;
         self::$id = $id;
         self::$user_url = $this->formatrewriting(self::$user);
+        
+        // mise a jour du dernier passage
+        $obj->maj_last_viste(self::$id);
     }
 
     function formatrewriting($chaine) {

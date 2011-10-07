@@ -110,6 +110,21 @@ footer{
 
 div.cadre_bleu{
     background-color: #2B89BA;
-    padding: 20px;
+    padding: 10px 20px;
+    
+    margin: 20px 0;
     margin-right: 15px;
+}
+
+a.bouton{
+    display: inline-block;
+    background-color: #077bb4;
+    text-align: center;
+    padding: 10px 20px;
+    color: #ADE0E0;
+    text-decoration: none;
+}
+a.bouton:hover{
+    background-color: #35517c;
+    color: #FFF;
 }

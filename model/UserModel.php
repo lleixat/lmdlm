@@ -136,6 +136,11 @@ class UserModel extends Model {
         return $this->pdo->query($sql)->fetchAll(PDO::FETCH_OBJ);
         
     }
+    
+    function maj_last_viste($id){
+        $sql = "UPDATE users SET last='".time()."' WHERE id='{$id}'";
+        $this->pdo->exec($sql);
+    }
 }
 
 ?>

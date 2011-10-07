@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 <html lang="fr">
@@ -13,6 +12,7 @@
 
         <meta name="description" content="<?php echo DESCRIPTION ?>">
         <style type="text/css">
+
         </style>
     </head>
     <body>
@@ -23,20 +23,11 @@
             require LAYOUT_NAV;
             ?>
 
-            <div id="content">
-                <h1>Admnistration</h1>
-                <ul>
-                    <li><a href="admin_resultatsMdlm/admin_resultats-mdlm.html">
-                            Administration des résultats quotidiens</a></li>
-                    <li><a href="#">Administration des mots</a></li>
-                    <li><a href="#">Administration des utilisateurs</a></li>                    
-                </ul>
-
+            <div id="content">            
+                    <?php
+                    echo $this->contenu['html'];
+                    ?>
             </div>
-
-
-
-
             <?php
             require LAYOUT_FOOTER;
             ?>

@@ -50,7 +50,6 @@ $c = $this->contenu['liste_mots_user'];
                         </p>
                     </form>
                 </div>
-                <br />
                 <?php
                 echo $c;
                 ?>

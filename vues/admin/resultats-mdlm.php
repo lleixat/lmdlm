@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 <html lang="fr">
@@ -13,6 +12,24 @@
 
         <meta name="description" content="<?php echo DESCRIPTION ?>">
         <style type="text/css">
+            @import url(http://fonts.googleapis.com/css?family=Schoolbell);
+            span.phrase{
+                font-size: 0.9em;
+                display: block;
+                padding: 10px;
+                background-color: #297DA9;
+                margin: 10px;
+            }
+            div.bigbig{
+                font-family: 'Schoolbell', cursive;
+                font-size: 2.5em;
+                text-align: center;
+                font-weight: bold;
+            }
+            span.lmdlm{
+                font-weight: bold;
+                color: #00ffff;
+            }
         </style>
     </head>
     <body>
@@ -24,19 +41,12 @@
             ?>
 
             <div id="content">
-                <h1>Admnistration</h1>
-                <ul>
-                    <li><a href="admin_resultatsMdlm/admin_resultats-mdlm.html">
-                            Administration des résultats quotidiens</a></li>
-                    <li><a href="#">Administration des mots</a></li>
-                    <li><a href="#">Administration des utilisateurs</a></li>                    
-                </ul>
+                <h1 class="titre_page">Administration</h1>    
 
+                <?php
+                echo $this->contenu['html'];
+                ?>
             </div>
-
-
-
-
             <?php
             require LAYOUT_FOOTER;
             ?>

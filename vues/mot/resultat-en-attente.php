@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 <html lang="fr">
@@ -13,6 +12,7 @@
 
         <meta name="description" content="<?php echo DESCRIPTION ?>">
         <style type="text/css">
+
         </style>
     </head>
     <body>
@@ -24,19 +24,16 @@
             ?>
 
             <div id="content">
-                <h1>Admnistration</h1>
-                <ul>
-                    <li><a href="admin_resultatsMdlm/admin_resultats-mdlm.html">
-                            Administration des résultats quotidiens</a></li>
-                    <li><a href="#">Administration des mots</a></li>
-                    <li><a href="#">Administration des utilisateurs</a></li>                    
-                </ul>
-
+                <h1 class="titre_page">Attente...</h1>
+                <div class="cadre_bleu radius10">                    
+                    <?php
+                    ?>
+                    <p>Vous venez de valider votre performance, elle a bien été prise en compte 
+                        et sera vérifiée tres vite par un validateur.<br />
+                        A bientot !  :)
+                    </p>
+                </div>
             </div>
-
-
-
-
             <?php
             require LAYOUT_FOOTER;
             ?>
