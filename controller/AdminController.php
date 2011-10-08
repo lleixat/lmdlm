@@ -21,11 +21,17 @@ class AdminController extends Controller {
         require MODEL . DS . 'AdminModel.php';
         $this->am = new AdminModel;
         $liste = $this->am->lister_resultats_a_valider();
-        //$this->contenu['liste'] = $this->am->lister_resultats_a_valider();
+
 
         if ($liste !== false && count($liste) > 0) {
             $cadre = "<h3>Validation du resultat</h3>\n";
-            foreach ($liste as $r) {
+            foreach ($liste as $r) {                
+                
+                
+                $dossier_img = "captures/".date("Y",$r->heure);
+                $capture = $dossier_img."/".$r->capture;               
+                
+                
                 $phrase = "";
                 $lien_non = "admin_refuserResultat/{$r->id_resultat}/administrer-resultat.html";
                 $lien_oui = "admin_accepterResultat/{$r->id_resultat}/administrer-resultat.html";
@@ -38,6 +44,9 @@ class AdminController extends Controller {
                 $phrase .= "<p>Il a placé le mot dans la phrase suivante :</p>
                             <span class='phrase radius5'>".ucfirst(nl2br($txt))."</span>";
                 $phrase .= "<p>Voici sa capture d'écran :</p>";
+                
+                $phrase .= "<img src='{$capture}' alt='capture' />";
+                
                 $phrase .= "<p>Valider son MDLM ? 
                             <a href='{$lien_oui}' class='bouton radius5'>oui</a>
                             <a href='{$lien_non}' class='bouton radius5'>non</a></p>";

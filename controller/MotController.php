@@ -72,14 +72,14 @@ class MotController extends Controller {
 
         $objmot = $this->mm->assigne_mot();
 
-         if ($objmot->id_resultat == 0) {
+        if ($objmot->id_resultat == 0) {
             $lien_resultat = "<p>
                 <a href='mot_reussite/signaler-ma-reussite.html' 
                             class='bouton radius5'>J'ai réussi !</a></p>";
-            $image ="";
+            $image = "";
         } else {
             $lien_resultat = "";
-            
+
             $etat_de_validation = $this->mm->ce_resultat_est_il_valide($objmot->id_resultat);
             switch ($etat_de_validation) {
                 case "0":
@@ -138,14 +138,14 @@ class MotController extends Controller {
         require MODEL . DS . 'MotModel.php';
         $this->mm = new MotModel;
         $infos = $this->mm->renvoie_infos_mot_du_jour();
-       
-        
+
+
         if (is_object($infos)) {
 
             if ($infos->id_resultat == 0) {
 
-                $phrase = "<p>Aujourd'hui ".User::$user.", tu devais réussir a placer le mot :</p>";
-                $phrase.= "<div class='bigbig'>".ucfirst($infos->mot)."</div>";
+                $phrase = "<p>Aujourd'hui " . User::$user . ", tu devais réussir a placer le mot :</p>";
+                $phrase.= "<div class='bigbig'>" . ucfirst($infos->mot) . "</div>";
                 $phrase.= "<p>Dans quelle phrase l'avez vous placé ?</p>";
                 $form = "<form action='mot_signalerReussite/validation-du-mot.html' 
                           enctype='multipart/form-data' id='vm_form' method='post'>
@@ -186,11 +186,40 @@ class MotController extends Controller {
             require CONTROLLER . DS . 'FileController.php';
             $fc = new FileController;
 
+
+
+
+
+
             $upload = $fc->upload_fichier($f, array("image/jpeg", "image/png"));
             if ($upload) {
                 // l'upload a bien été fait
-                // prévoir la compression et le déplacement vers un autre dossier plus approprié
                 $capture = $fc->nouveau_nom;
+
+                // on déplace la capture dans un dossier plus approprié 
+                // on le cree si il n'existe pas
+                $dossier = WEB . DS . "captures" . DS . date("Y", time());
+                if (!file_exists($dossier) || !is_dir($dossier)) {
+                    // il n'existe pas , on le crée
+                    if (!mkdir($dossier, 0777)) {
+                        $this->error = "Le fichier ne peut pas etre créé donc on ne peut pas continuer";
+                        $this->affiche_erreur();
+                    }
+                }
+                // on compresse la grande vers le bon dossier et une taille plus correcte
+                if (!$fc->compresse_image(UPLOADS . DS . $capture, 600, $dossier.DS, 80)) {
+                    $this->error = $fc->error;
+                    $this->affiche_erreur();
+                } else {
+                    // on vire la grande
+                    unlink(UPLOADS . DS . $capture);
+                }
+
+
+
+
+
+
                 $phrase = filter_var($p['vm_phrase'], FILTER_SANITIZE_STRING);
                 $hash = $p['hash'];
 
@@ -209,7 +238,6 @@ class MotController extends Controller {
                     // on met le mot du jour en attente de validation
                     if ($this->mm->maj_mdj_attente_validation($id_resultat, $hash)) {
                         // impecable
-
                         header('Location:../mot_resultat-en-attente.html');
                     } else {
                         // erreur de mise a jour du 'mot_du_jour' du gars
@@ -230,8 +258,6 @@ class MotController extends Controller {
             $this->error = "Vous avez oublié la capture d'ecran !";
             $this->affiche_erreur();
         }
-
-        //$this->affiche_erreur(ERROR_SYS,$this->request->params);
     }
 
 }
