@@ -11,12 +11,22 @@
         <script src="js/jquery-1.6.4.min.js"></script>
 
         <meta name="description" content="<?php echo DESCRIPTION ?>">
-
-        <style>
-            p{
-                margin: 0;
+        
+        
+        <style type="text/css">
+            span.user{
+                display: inline-block;
+                text-align: right;
+                width: 200px;
+            }
+            a.lien_user{
+                  text-align: right;
+                font-weight: bold;
+                color: #ADE0E0;
+                text-decoration: none;
             }
         </style>
+        
     </head>
     <body>
         <div id="conteneur" class="ombre10">
@@ -27,11 +37,12 @@
             ?>
 
             <div id="content">
-
-                <?php
-                echo $contenu['user_infos_html'];
-                ?>
-
+                <h1>Top score</h1>
+                <div class="cadre_bleu radius10">
+                    <?php
+                    echo $this->contenu['liste'];
+                    ?>
+                </div>
             </div>
 
 
@@ -41,3 +52,4 @@
         </div>
     </body>
 </html>
+

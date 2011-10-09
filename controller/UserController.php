@@ -61,15 +61,29 @@ class UserController extends Controller {
 
             if ($infos !== false && is_object($infos)) {
 
-                // $this->prp($infos);
+                // on verifie les tentatives
+                $resultats_valides = $user->compte_resultats_valides($id);
+                $resultats_invalides = $user->compte_resultats_invalides($id);
+
+                if ($resultats_valides > 0 || $resultats_invalides > 0) {
+                    $nb_parties = $resultats_invalides + $resultats_valides;
+                    $resultats = "<p>MDLM validés : {$resultats_valides}</p>";
+                    $resultats.= "<p>MDLM foirés : {$resultats_invalides}</p>";
+                } else {
+                    $resultats = "<p>Aucunes tentatives pour l'instant.</p>";
+                }
+
                 // on prepare le html dynampique a envoyer a la page de membre
                 $html = "";
                 $html.= "<h1>{$infos->user}</h1>";
+                $html.= "<div class='cadre_bleu radius10'>";
                 $html.= "<p>Adresse e-mail : {$infos->mail}</p>";
                 $html.= "<p>Date d'inscription  : {$this->formatteDate($infos->inscription)}</p>";
                 $html.= "<p>Derniere visite     : {$this->formatteDate($infos->last)}</p>";
                 $html.= "<p>Etablissement       : {$infos->type_etab} de {$infos->ville}</p>";
                 $html.= "<p>Promotion           : {$infos->promo}  |  {$infos->annee}/" . ($infos->annee + 1) . "</p>";
+                $html.= "<br />" . $resultats;
+                $html.= "</div>";
 
 
                 $this->contenu['user_infos_html'] = $html;
@@ -87,36 +101,44 @@ class UserController extends Controller {
             return false;
         }
     }
-    
+
     /**
      * cette fonction va chercher la liste des membres via le usermodel et cree le html a mettre
      *  dans la page puis appelle la page
      */
-    function listeMembres(){
+    function listeMembres() {
         $um = new UserModel;
         $list_all = $um->liste_des_membres();
         $list_unv = $um->liste_des_membres(false);
         $id_unv = array();
         // on garde juste les id des mecs non validés pour comparer
-        foreach($list_unv as $membre_unv){
+        foreach ($list_unv as $membre_unv) {
             $id_unv[] = $membre_unv->user_id;
         }
-        
+
         // modele ligne membre
         $mlm = "<p><a href='user_pageMembre/%d/user_%s.html' class='lien_membre'>%s</a> inscrit le ";
         $mlm.= "<span class='date_insc'>%s</span> ";
-        $mlm.= "<img src='%s' alt='validation du compte' style='vertical-align: middle;' /></p>\n";
-        
+        $mlm.= "%s %s</p>\n";
+
         // contenu html
         $html = "";
-        
-        foreach($list_all as $membre){
-            $image = (in_array($membre->id, $id_unv))?"imgs/nonvalide.png":"imgs/valide.png";
+
+        foreach ($list_all as $membre) {
+            $image = (in_array($membre->id, $id_unv)) ? "<img src='imgs/nonvalide.png' alt='validation du compte' style='vertical-align: middle;' />" : "";
+            $resultats_valides = $um->compte_resultats_valides($membre->id);
+            $resultats_invalides = $um->compte_resultats_invalides($membre->id);
+            if ($resultats_valides > 0 || $resultats_invalides > 0) {
+                $nb_parties = $resultats_invalides + $resultats_valides;
+                $resultats = "(" . $resultats_valides . "/" . $nb_parties . ")";
+            } else {
+                $resultats = "";
+            }
             $urlUser = $this->formatrewriting($membre->user);
-            $html .= sprintf($mlm,$membre->id,$urlUser,$membre->user,date('d/m/Y',$membre->inscription),$image);
+            $html .= sprintf($mlm, $membre->id, $urlUser, $membre->user, date('d/m/Y', $membre->inscription), $image, $resultats);
         }
         $this->contenu['liste_membre_html'] = $html;
-        $file = VUES.DS."user".DS."liste-membre.php";
+        $file = VUES . DS . "user" . DS . "liste-membre.php";
         $this->afficher_vue($file);
     }
 
@@ -149,11 +171,11 @@ class UserController extends Controller {
                                             $id = $userModel->enregistrer_new_user($p);
 
                                             if ($id !== false && $id > 0) {
-                                                
+
                                                 // on renseigne la table unvalidated_user
-                                                $clef = md5($id).md5($p['insc_mail']).md5("lemodlamort");
+                                                $clef = md5($id) . md5($p['insc_mail']) . md5("lemodlamort");
                                                 $clef = sha1($clef);
-                                                $userModel->ajoute_unvalidated_user($id,$clef);
+                                                $userModel->ajoute_unvalidated_user($id, $clef);
 
                                                 $_SESSION['login'] = true;
                                                 $_SESSION['id_user'] = $id;
@@ -217,6 +239,25 @@ class UserController extends Controller {
 
         header('Location:../accueil.html');
         exit;
+    }
+
+    function topScore() {
+        $um = new UserModel;
+        $liste = $um->liste_par_score();
+        
+        $html = "";
+        $mdl_lienUser = "<a href='user_pageMembre/%d/user_%s.html' class='lien_user'>%s</a>";
+        $mdl_ligne = "<p><span class='user'>%s</span> score : %d MDLM</p>";
+        
+        foreach($liste as $user){
+            $lien = sprintf($mdl_lienUser,$user->id,$this->formatrewriting($user->user),$user->user);
+            $html.= sprintf($mdl_ligne,$lien,$user->score);
+        }
+        
+        $this->contenu['liste'] = $html;
+        
+        $file = VUES . DS . $this->request->dossier . DS . $this->request->vue;
+        $this->afficher_vue($file);
     }
 
 }

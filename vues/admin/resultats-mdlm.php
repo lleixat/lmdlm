@@ -30,6 +30,11 @@
                 font-weight: bold;
                 color: #00ffff;
             }
+            img.capture{
+                display: block;
+                margin: auto;
+                border: 10px solid #ADE0E0;
+            }
         </style>
     </head>
     <body>

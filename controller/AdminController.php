@@ -25,28 +25,33 @@ class AdminController extends Controller {
 
         if ($liste !== false && count($liste) > 0) {
             $cadre = "<h3>Validation du resultat</h3>\n";
-            foreach ($liste as $r) {                
-                
-                
-                $dossier_img = "captures/".date("Y",$r->heure);
-                $capture = $dossier_img."/".$r->capture;               
-                
-                
-                $phrase = "";
+            foreach ($liste as $r) {
+
+                if($r->capture !== ""){
+                    $dossier_img = "captures/" . date("Y", $r->heure);
+                    $capture = $dossier_img . "/" . $r->capture;
+                    $image = "<img src='{$capture}' alt='capture' class='capture' />";
+                } else {
+                    $image = "<p>*[probleme d'image..]*</p>";
+                }
+
                 $lien_non = "admin_refuserResultat/{$r->id_resultat}/administrer-resultat.html";
                 $lien_oui = "admin_accepterResultat/{$r->id_resultat}/administrer-resultat.html";
+
                 $date_mdlm = $this->formatteDate($r->heure);
+
+                $phrase = "";
                 $phrase .= "<p>{$date_mdlm} <b>{$r->user}</b> a recu le MDLM :</p>";
-                $phrase .= "<div class='bigbig'>".ucfirst($r->mot)."</div>";
-                
+                $phrase .= "<div class='bigbig'>" . ucfirst($r->mot) . "</div>";
+
                 $txt = str_replace($r->mot, "<span class='lmdlm'>{$r->mot}</span>", $r->phrase);
-                
+
                 $phrase .= "<p>Il a placé le mot dans la phrase suivante :</p>
-                            <span class='phrase radius5'>".ucfirst(nl2br($txt))."</span>";
+                            <span class='phrase radius5'>" . ucfirst(nl2br($txt)) . "</span>";
                 $phrase .= "<p>Voici sa capture d'écran :</p>";
-                
-                $phrase .= "<img src='{$capture}' alt='capture' />";
-                
+
+                $phrase .= $image;
+
                 $phrase .= "<p>Valider son MDLM ? 
                             <a href='{$lien_oui}' class='bouton radius5'>oui</a>
                             <a href='{$lien_non}' class='bouton radius5'>non</a></p>";
@@ -65,6 +70,12 @@ class AdminController extends Controller {
     }
 
     function refuserResultat($id) {
+        // si le mec n'est pas admin on l'envoi se faire foutre
+        if (User::$rang < 5) {
+            $this->error = "Tes admin depuis quand toi ?";
+            $this->affiche_erreur();
+        }
+        
         require MODEL . DS . 'AdminModel.php';
         $this->am = new AdminModel;
 
@@ -80,6 +91,12 @@ class AdminController extends Controller {
     }
 
     function accepterResultat($id) {
+        // si le mec n'est pas admin on l'envoi se faire foutre
+        if (User::$rang < 5) {
+            $this->error = "Tes admin depuis quand toi ?";
+            $this->affiche_erreur();
+        }
+
         require MODEL . DS . 'AdminModel.php';
         $this->am = new AdminModel;
 
@@ -93,6 +110,7 @@ class AdminController extends Controller {
         $file = VUES . DS . "admin" . DS . $this->request->vue;
         $this->afficher_vue($file);
     }
+    
 
 }
 

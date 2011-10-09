@@ -9,7 +9,7 @@
     }
     ?>
     <a href="user_listeMembres/la-liste-des-membres.html" class="radius5">Membres</a>
-    <a href="#" class="radius5">Top Scores</a>
+    <a href="user_topScore/user_top-score.html" class="radius5">Top Scores</a>
     <a href="mot_afficher/proposer-mot.html" class="radius5">Proposer mot</a>
     <a href="version.html#reglement" class="radius5">Règlement</a>
 
