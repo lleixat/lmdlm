@@ -15,7 +15,12 @@
             p img{
                 vertical-align: middle;
             }
-
+            div.bigbig{
+                font-family: 'Schoolbell', cursive;
+                font-size: 2.5em;
+                text-align: center;
+                font-weight: bold;
+            }
         </style>
     </head>
     <body>
@@ -30,13 +35,14 @@
                 <h1 class="titre_page">Le mot du jour</h1>
                 <div class="cadre_bleu radius10">
                     <?php
-                        echo $this->contenu['phrase'];;
+                    echo $this->contenu['phrase'];
+                    ;
                     ?>
                 </div>
                 <h2>Historique</h2>
                 <div class="cadre_bleu radius10">
                     <?php
-                        echo $this->contenu['histo'];
+                    echo $this->contenu['histo'];
                     ?>
                 </div>
             </div>

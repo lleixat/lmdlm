@@ -128,7 +128,7 @@ class MotController extends Controller {
             $lien_resultat = "<p>
                 <a href='mot_reussite/signaler-ma-reussite.html' 
                             class='bouton radius5'>J'ai réussi !</a></p>";
-            $phrase .= "<p>Voila ton mot d'aujourd'hui : '<b>{$objmot->mot}</b>', bonne chance !</p>" . $lien_resultat;
+            $phrase .= "<p>Voila ton mot d'aujourd'hui : <div class='bigbig'>".ucfirst($objmot->mot)."</div> bonne chance !</p>" . $lien_resultat;
         } else {
             $lien_resultat = "";
 
@@ -138,7 +138,7 @@ class MotController extends Controller {
             switch ($etat_de_validation) {
                 case "0": // en attente de validation 
                     $image = "<img src='imgs/pendule.png' alt='img statut' />";
-                    $phrase .= "<p>{$image} Ajourd'hui ton mot était '<b>{{$objmot->mot}}, tu dois attendre la validation...</b>'</p>" . $lien_resultat;
+                    $phrase .= "<p>{$image} Ajourd'hui ton mot était '<b>{$objmot->mot}</b>',<br /> tu dois attendre la validation...</b>'</p>" . $lien_resultat;
                     break;
                 case "1": // validé
                     $image = "<img src='imgs/valide.png' alt='img statut' />";
@@ -170,10 +170,28 @@ class MotController extends Controller {
 
         if (count($liste) > 0) {
             $html = "";
-            $mdl = "<p>%s LMDLM était : <b>%s</b>
-                    <img src='imgs/%s' alt='statut resultat' /></p>";
+            $mdl = "<p>%s LMDLM était : <b>%s</b> %s</p>";
             foreach ($liste as $motjour) {
-                $img = ($motjour->id_resultat == 0) ? "nonvalide.png" : "valide.png";
+                
+                $id_resultat  = $motjour->id_resultat;
+                if($id_resultat > 0){
+                $valide = $this->mm->ce_resultat_est_il_valide($id_resultat);
+
+                switch($valide){
+                    case "0":
+                        $img = "<img src='imgs/pendule.png' alt='statut' title='Tentative en attente de validation' />";
+                        break;
+                    case "1":
+                        $img = "<img src='imgs/valide.png' alt='statut' title='Tentative validée' />";
+                        break;
+                    case "9":
+                        $img = "<img src='imgs/nonvalide.png' alt='statut' title='Tentative refusée' />";
+                        break;
+                }
+                } else {
+                     $img = "<img src='imgs/excla.png' alt='statut' title='Tentative non réussie dans les temps' />";
+                }
+                
                 $date = ucfirst($this->formatteDate($motjour->heure));
                 $html.= sprintf($mdl, $date, $motjour->mot, $img);
             }

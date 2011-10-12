@@ -248,11 +248,12 @@ class UserController extends Controller {
         
         $html = "";
         $mdl_lienUser = "<a href='user_pageMembre/%d/user_%s.html' class='lien_user'>%s</a>";
-        $mdl_ligne = "<p><span class='user'>%s</span> score : %d MDLM</p>";
+        $mdl_ligne = "<p><span class='user'>%s</span> score : %d MDLM <span class='barre radius5' style='width:%dpx;'></span></p>";
         
-        foreach($liste as $user){
+        foreach($liste as $user){            
+            $score = ($user->score > 320)?320:$user->score;
             $lien = sprintf($mdl_lienUser,$user->id,$this->formatrewriting($user->user),$user->user);
-            $html.= sprintf($mdl_ligne,$lien,$user->score);
+            $html.= sprintf($mdl_ligne,$lien,$user->score,$score);
         }
         
         $this->contenu['liste'] = $html;

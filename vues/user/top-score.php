@@ -25,6 +25,14 @@
                 color: #ADE0E0;
                 text-decoration: none;
             }
+            p{
+                margin: 0;
+            }
+            span.barre{
+                background: transparent url(imgs/bleubarre.jpg) repeat-x;
+                height: 10px;
+                display: inline-block;
+            }
         </style>
         
     </head>

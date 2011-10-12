@@ -39,7 +39,7 @@ class MotModel extends Model {
     }
 
     function renvoie_mot_aléatoire() {
-        $sql = "SELECT * FROM mots ORDER BY RAND() LIMIT 0,1";
+        $sql = "SELECT * FROM mots WHERE valide='1' ORDER BY RAND() LIMIT 0,1";
         return $this->pdo->query($sql)->fetch(PDO::FETCH_OBJ);
     }
 
@@ -95,6 +95,8 @@ class MotModel extends Model {
         $jour = date("z", time());
         $an = date("Y", time());
         $id_user = User::$id;
+        if($id_user == null)
+            return false;
         $sql = "SELECT heure,mot,id_resultat 
                 FROM mot_du_jour mdj 
                 LEFT JOIN mots m
