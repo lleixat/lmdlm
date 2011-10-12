@@ -16,10 +16,11 @@ class MotController extends Controller {
         require MODEL . DS . 'MotModel.php';
         $this->mm = new MotModel;
 
-        $this->mm->ajouter_mot($mot);
+        $this->contenu['html_prop_mot'] = ($this->mm->ajouter_mot($mot) == 1)?"<p>Mot '<b>{$mot}</b>' envoyé ! </p>":"<p>Ca a foiré chef ! Votre mot n'a pas été envoyé! <br />Il est surement déja dans la base... <br /><b>Vérifie !</b></p>";
         $this->mots_proposes_du_gars();
+        $this->liste_tous_les_mots();
 
-        $file = VUES . DS . "static" . DS . "proposer-mot.html";
+        $file = VUES . DS . "mot" . DS . "proposer-mot.html";
         $this->afficher_vue($file);
     }
 
@@ -30,7 +31,27 @@ class MotController extends Controller {
      */
     function afficher() {
         $this->mots_proposes_du_gars();
-        $file = VUES . DS . "static" . DS . "proposer-mot.html";
+        $this->liste_tous_les_mots();
+
+        if (User::$id !== null) {
+            $pm_jeton = md5(CLE_SHA_PERSO . time() . rand(0, 15));
+            $_SESSION['jeton_prop_mot'] = $pm_jeton;
+
+            $html = "<form action='mot_proposer/proposer-mot.html' enctype='multipart/form-data' method='post' id='pm_form'>
+                        <p>
+                            <input type='hidden' name='pm_jeton' value='{$pm_jeton}' />
+                            <label for='pm_mot'>Quel mot souhaitez vous proposer ?</label><br />
+                            <input type='text' name='pm_mot' id='pm_mot' /><br />
+                            <input type='submit' value='Proposer !' />
+                        </p>
+                    </form>";
+        } else {
+            $html = "<p>Vous devez etre inscrit pour proposer un mot</p>";
+        }
+
+        $this->contenu['html_prop_mot'] = $html;
+
+        $file = VUES . DS . "mot" . DS . "proposer-mot.html";
         $this->afficher_vue($file);
     }
 
@@ -47,7 +68,8 @@ class MotController extends Controller {
         $liste = $this->mm->liste_mots(User::$id, 25);
 
         if (count($liste) > 0) {
-            $html = "<div class='cadre_bleu radius10'>\n<h2>Vous avez proposé</h2>\n";
+            $titre = (User::$id !== null) ? "Vous avez proposé" : "Les derniers mots proposés";
+            $html = "<div class='cadre_bleu radius10'>\n<h2>{$titre}</h2>\n";
             $mdl_ligne_mot = "<p><span class='mot'>%s</span> 
                                 <img src='%s' alt='validation' /> proposé %s </p>\n";
             foreach ($liste as $mot) {
@@ -63,6 +85,34 @@ class MotController extends Controller {
         }
     }
 
+    function liste_tous_les_mots() {
+        
+        // on ne cree l'objet que si il n'existe pas
+        if (!is_object($this->mm)) {
+            require MODEL . DS . 'MotModel.php';
+            $this->mm = new MotModel;
+        }
+        $liste = $this->mm->liste_mots(false,false,true);
+
+        if (count($liste) > 0) {
+            
+            $html = "<div class='cadre_bleu radius10'>\n<h2>Tous les mots disponibles</h2>\n";
+            $mdl_ligne_mot = "<p><span class='mot'>%s</span> 
+                                <img src='%s' alt='validation' /> proposé %s </p>\n";
+            foreach ($liste as $mot) {
+                $date = $this->formatteDate($mot->date);
+                $image = ($mot->valide == 1) ? "imgs/valide.png" : "imgs/nonvalide.png";
+                $html.= sprintf($mdl_ligne_mot, $mot->mot, $image, $date);
+            }
+            $this->contenu['liste_tous_mots'] = $html . "</div>";
+        } else {
+            $this->contenu['liste_tous_mots'] = "
+                <div class='cadre_bleu'>
+                    <h2>Y a pas de mots la dedans...</h2>
+                </div>";
+        }
+    }
+
     /**
      *  assigne un mot au gars pour la journée
      */
@@ -72,25 +122,31 @@ class MotController extends Controller {
 
         $objmot = $this->mm->assigne_mot();
 
+        $phrase = "";
+
         if ($objmot->id_resultat == 0) {
             $lien_resultat = "<p>
                 <a href='mot_reussite/signaler-ma-reussite.html' 
                             class='bouton radius5'>J'ai réussi !</a></p>";
-            $image = "";
+            $phrase .= "<p>Voila ton mot d'aujourd'hui : '<b>{$objmot->mot}</b>', bonne chance !</p>" . $lien_resultat;
         } else {
             $lien_resultat = "";
 
             $etat_de_validation = $this->mm->ce_resultat_est_il_valide($objmot->id_resultat);
+
+            // on va chercher l'image qui correspond au statut du resultat
             switch ($etat_de_validation) {
-                case "0":
-                    // en attente de validation 
+                case "0": // en attente de validation 
                     $image = "<img src='imgs/pendule.png' alt='img statut' />";
+                    $phrase .= "<p>{$image} Ajourd'hui ton mot était '<b>{{$objmot->mot}}, tu dois attendre la validation...</b>'</p>" . $lien_resultat;
                     break;
-                case "1":
+                case "1": // validé
                     $image = "<img src='imgs/valide.png' alt='img statut' />";
+                    $phrase .= "<p>{$image} Ta tentative à été validée pour le mot <b>{$objmot->mot}</b> !</p>" . $lien_resultat;
                     break;
-                case "9":
+                case "9": // refusé par un enculé^^
                     $image = "<img src='imgs/nonvalide.png' alt='img statut' />";
+                    $phrase .= "<p>{$image} Tentative pour le mot '<b>{$objmot->mot}</b>' refusée, tu feras mieux demain...</p>" . $lien_resultat;
                     break;
                 default :
                     $image = "";
@@ -99,14 +155,7 @@ class MotController extends Controller {
         }
 
 
-
-
-        $mot_today = "";
-        $mot_today.= "<p>Aujourd'hui, jour {$objmot->jour} de l'an {$objmot->annee}, ";
-        $mot_today.= "votre mot est : <b>{$objmot->mot}</b>.{$image}</p>";
-        $mot_today.= $lien_resultat;
-
-        $this->contenu['mot_today'] = $mot_today;
+        $this->contenu['phrase'] = $phrase;
         $this->contenu['histo'] = $this->preparer_historique_mots_perso();
 
         $file = VUES . DS . "mot" . DS . "le-mot-du-jour.html";
@@ -207,7 +256,7 @@ class MotController extends Controller {
                     }
                 }
                 // on compresse la grande vers le bon dossier et une taille plus correcte
-                if (!$fc->compresse_image(UPLOADS . DS . $capture, 600, $dossier.DS, 80)) {
+                if (!$fc->compresse_image(UPLOADS . DS . $capture, 600, $dossier . DS, 80)) {
                     $this->error = $fc->error;
                     $this->affiche_erreur();
                 } else {
@@ -259,7 +308,6 @@ class MotController extends Controller {
             $this->affiche_erreur();
         }
     }
-
 }
 
 ?>

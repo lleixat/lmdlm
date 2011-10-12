@@ -27,7 +27,7 @@ class AdminController extends Controller {
             $cadre = "<h3>Validation du resultat</h3>\n";
             foreach ($liste as $r) {
 
-                if($r->capture !== ""){
+                if ($r->capture !== "") {
                     $dossier_img = "captures/" . date("Y", $r->heure);
                     $capture = $dossier_img . "/" . $r->capture;
                     $image = "<img src='{$capture}' alt='capture' class='capture' />";
@@ -75,7 +75,7 @@ class AdminController extends Controller {
             $this->error = "Tes admin depuis quand toi ?";
             $this->affiche_erreur();
         }
-        
+
         require MODEL . DS . 'AdminModel.php';
         $this->am = new AdminModel;
 
@@ -110,7 +110,57 @@ class AdminController extends Controller {
         $file = VUES . DS . "admin" . DS . $this->request->vue;
         $this->afficher_vue($file);
     }
+
+    function accepter_mot($id) {
+        
+    }
+
+    function refuser_mot($id) {
+        
+    }
+
+    function valideMots() {
+        require MODEL . DS . 'MotModel.php';
+        $this->mm = new MotModel;
+        $liste = $this->mm->liste_mot_et_posteur();
+        
+        $model = "<p><span class='mot'>%s</span> <a href='%s'>%s</a> proposé par %s <span class='date'>%s</span>
+            </p>";
+        $html = "";
+        
+        foreach($liste as $mot){            
+            if($mot->valide == 0){
+                $image = "<img src='imgs/nonvalide.png' alt='img non valide' />";
+                $lien = "admin_accepterMot/{$mot->id_mot}/administration-des-mots.html";
+            } else {
+                $image = "<img src='imgs/valide.png' alt='img valide' />";
+                $lien = "admin_refuserMot/{$mot->id_mot}/administration-des-mots.html";
+            }
+            // /user_pageMembre/6/user_rudak.html
+            $lien_user = "<a href='user_pageMembre/{$mot->id_user}/user_".$this->formatrewriting($mot->user).".html'>{$mot->user}</a>";
+            $html .= sprintf($model,ucfirst($mot->mot),$lien,$image, $lien_user,$this->formatteDate($mot->date));
+        }
+        
+        $this->contenu['liste'] = $html;
+        
+        $file = VUES . DS . "admin" . DS . $this->request->vue;
+        $this->afficher_vue($file);
+    }
     
+    function accepterMot($id){
+        require MODEL . DS . 'AdminModel.php';
+        $this->am = new AdminModel;
+        $this->am->accepter_un_Mot($id);
+        
+        $this->valideMots();
+    }
+    function refuserMot($id){
+        require MODEL . DS . 'AdminModel.php';
+        $this->am = new AdminModel;
+        $this->am->refuser_un_Mot($id);
+        
+        $this->valideMots();
+    }
 
 }
 

@@ -1,9 +1,3 @@
-<?php
-$pm_jeton = md5(CLE_SHA_PERSO . time() . rand(0, 15));
-$_SESSION['jeton_prop_mot'] = $pm_jeton;
-
-$c = $this->contenu['liste_mots_user'];
-?>
 <!DOCTYPE html>
 
 <html lang="fr">
@@ -40,18 +34,13 @@ $c = $this->contenu['liste_mots_user'];
             <div id="content">
                 <h1 class="titre_page">proposer un mot</h1>
                 <div class="cadre_bleu radius10" >
-                    <form action="mot_proposer/proposer-mot.html" enctype="multipart/form-data" 
-                          method="post" id="pm_form">
-                        <p>
-                            <input type="hidden" name="pm_jeton" value="<?php echo $pm_jeton; ?>" />
-                            <label for="pm_mot">Quel mot souhaitez vous proposer ?</label><br />
-                            <input type="text" name="pm_mot" id="pm_mot" /><br />
-                            <input type="submit" value="Proposer !" />
-                        </p>
-                    </form>
+                    <?php
+                    echo $this->contenu['html_prop_mot'];
+                    ?>
                 </div>
                 <?php
-                echo $c;
+                echo $this->contenu['liste_mots_user'];
+                        echo $this->contenu['liste_tous_mots'];
                 ?>
 
 

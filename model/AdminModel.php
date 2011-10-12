@@ -39,6 +39,16 @@ class AdminModel extends Model {
         return $res->nb;
     }
 
+    function accepter_un_Mot($id) {
+        $sql = "UPDATE mots SET valide='1' WHERE id='{$id}'";
+        $this->pdo->exec($sql);
+    }
+
+    function refuser_un_Mot($id) {
+        $sql = "UPDATE mots SET valide='0' WHERE id='{$id}'";
+        $this->pdo->exec($sql);
+    }
+
 }
 
 ?>

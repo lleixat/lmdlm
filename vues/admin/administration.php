@@ -43,7 +43,7 @@ $txt_res_attente = ($nb > 0) ? "({$nb} en attente)" : "";
                             <a href="admin_resultatsMdlm/admin_resultats-mdlm.html" class="bouton radius5">Administration des résultats quotidiens <?php echo $txt_res_attente; ?></a>
                         </li>
                         <li>
-                            <a href="#" class="bouton radius5">Administration des mots</a>
+                            <a href="admin_valideMots/administration-des-mots.php" class="bouton radius5">Administration des mots</a>
                         </li>
                         <li>
                             <a href="#" class="bouton radius5">Administration des utilisateurs</a>

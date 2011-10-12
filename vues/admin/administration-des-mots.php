@@ -12,10 +12,25 @@
 
         <meta name="description" content="<?php echo DESCRIPTION ?>">
         <style type="text/css">
-            p img{
+            span.mot{
+                display: inline-block;
+                width: 200px;
+                text-align: right;
+                font-weight: bold;
+            }
+            #liste p{
+                margin: 0;
+            }
+            #liste a{
+                text-decoration: none;
+                color: #97E0D9;
+            }
+            p:hover{
+                background-color:#07628F;
+            }
+            #liste img{
                 vertical-align: middle;
             }
-
         </style>
     </head>
     <body>
@@ -27,19 +42,17 @@
             ?>
 
             <div id="content">
-                <h1 class="titre_page">Le mot du jour</h1>
-                <div class="cadre_bleu radius10">
+                <h1 class="titre_page">Administration des mots</h1>
+                <div class="cadre_bleu radius10" id="liste">
                     <?php
-                        echo $this->contenu['phrase'];;
-                    ?>
-                </div>
-                <h2>Historique</h2>
-                <div class="cadre_bleu radius10">
-                    <?php
-                        echo $this->contenu['histo'];
+                    echo $this->contenu['liste'];
                     ?>
                 </div>
             </div>
+
+
+
+
             <?php
             require LAYOUT_FOOTER;
             ?>

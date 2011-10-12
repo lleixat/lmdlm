@@ -24,8 +24,9 @@ class UserController extends Controller {
                     $_SESSION['login'] = true;
                     $_SESSION['id_user'] = $id_user;
 
-                    // retour vers la page d'accueil suite au login
-                    header('Location:../accueil.html');
+                    // retour vers la page precedente suite au login (ou a l'accueil par defaut)
+                    $redir = (isset($this->request->referer))?$this->request->referer:"../accueil.html";
+                    header('Location:'.$redir);
                     exit;
                 } else {
                     // erreur de login

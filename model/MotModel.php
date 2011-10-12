@@ -8,7 +8,7 @@ class MotModel extends Model {
         $req->bindValue(1, $mot, PDO::PARAM_STR);
         $req->bindValue(2, User::$id, PDO::PARAM_INT);
         $req->bindValue(3, time(), PDO::PARAM_INT);
-        $req->execute();
+        return @$req->execute();
     }
 
     function valider_mot() {
@@ -19,10 +19,22 @@ class MotModel extends Model {
         
     }
 
-    function liste_mots($posteur = false, $nb = false) {
+    function liste_mots($posteur = false, $nb = false, $valide=false) {
         $condition = ($posteur) ? "WHERE proposeur = '{$posteur}'" : "";
+        if ($valide !== false) {
+            if ($condition == "") {
+                $condition = "WHERE valide='1'";
+            } else {
+                $condition.= " AND valide='1'";
+            }
+        }
         $limit = ($nb) ? "limit 0,{$nb}" : "";
         $sql = "SELECT * FROM mots {$condition} ORDER BY id DESC {$limit}";
+        return $this->pdo->query($sql)->fetchAll(PDO::FETCH_OBJ);
+    }
+    
+    function liste_mot_et_posteur(){
+        $sql = "SELECT mot,m.id id_mot,m.valide,m.date,u.user,u.id id_user FROM mots m left join users u on m.proposeur=u.id ORDER BY m.id DESC";
         return $this->pdo->query($sql)->fetchAll(PDO::FETCH_OBJ);
     }
 
@@ -118,11 +130,12 @@ class MotModel extends Model {
         return $this->pdo->exec($sql);
     }
 
-    function ce_resultat_est_il_valide($id){
+    function ce_resultat_est_il_valide($id) {
         $sql = "SELECT valide FROM resultats WHERE id='{$id}'";
         $res = $this->pdo->query($sql)->fetch(PDO::FETCH_OBJ);
         return $res->valide;
     }
+
 }
 
 ?>

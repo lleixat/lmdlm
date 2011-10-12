@@ -12,7 +12,6 @@ foreach ($liste as $type){$opt .= sprintf($mdl_opt,$type->id,$type->nom);}?>
         <meta charset="UTF-8">
 
         <title><?php echo TITLE ?></title>
-
         <link rel="stylesheet" media="screen" href="css/general.css" />
         <link rel="stylesheet" media="screen" href="css/inscription.css" />
         <link rel="stylesheet" media="screen" href="css/trick.css" />
