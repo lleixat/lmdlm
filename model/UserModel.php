@@ -9,7 +9,8 @@ class UserModel extends Model {
      * @return id Renvoie id si ok ou false si pas ok
      */
     function controle_identifiants($user, $pass) {
-        $sql = "SELECT id  FROM " . $this->tables['TABLE_USERS'] . " WHERE user=? AND password=?";
+        $sql = "SELECT id  FROM " . $this->tables['TABLE_USERS'] . " 
+                    WHERE user=? AND password=?";
         $req = $this->pdo->prepare($sql);
         $req->bindValue(1, $user, PDO::PARAM_STR);
         $req->bindValue(2, sha1($pass . CLE_SHA_PERSO), PDO::PARAM_STR);
@@ -39,11 +40,14 @@ class UserModel extends Model {
                 FROM (
                 (
                 " . $this->tables['TABLE_USERS'] . " u
-                LEFT JOIN " . $this->tables['TABLE_ETAB'] . " e ON u.etab = e.id
+                LEFT JOIN " . $this->tables['TABLE_ETAB'] . " e 
+                    ON u.etab = e.id
                 )
-                LEFT JOIN " . $this->tables['TABLE_PROMO'] . " p ON u.promo = p.id
+                LEFT JOIN " . $this->tables['TABLE_PROMO'] . " p 
+                    ON u.promo = p.id
                 )
-                LEFT JOIN " . $this->tables['TABLE_TYPE_ETAB'] . " t ON e.type = t.id
+                LEFT JOIN " . $this->tables['TABLE_TYPE_ETAB'] . " t 
+                    ON e.type = t.id
                 WHERE u.id =?";
 
         $req = $this->pdo->prepare($sql);
@@ -61,7 +65,8 @@ class UserModel extends Model {
         if ($i === false)
             return FALSE;
 
-        $sql_etab = "INSERT INTO " . $this->tables['TABLE_ETAB'] . " VALUES (?, ?, NULL)";
+        $sql_etab = "INSERT INTO " . $this->tables['TABLE_ETAB'] . " 
+                        VALUES (?, ?, NULL)";
         $req = $this->pdo->prepare($sql_etab);
         $req->bindValue(1, $i['insc_type_etab'], PDO::PARAM_INT);
         $req->bindValue(2, $i['insc_ville_etab'], PDO::PARAM_STR);
@@ -69,7 +74,8 @@ class UserModel extends Model {
         $id_etab = $this->pdo->lastInsertId();
         $req->closeCursor();
 
-        $sql_promo = "INSERT INTO " . $this->tables['TABLE_PROMO'] . " VALUES (?,?,?,NULL)";
+        $sql_promo = "INSERT INTO " . $this->tables['TABLE_PROMO'] . " 
+                        VALUES (?,?,?,NULL)";
         $req = $this->pdo->prepare($sql_promo);
         $req->bindValue(1, $i['insc_promo_etab'], PDO::PARAM_STR);
         $req->bindValue(2, date("Y", time()), PDO::PARAM_INT);
@@ -78,7 +84,8 @@ class UserModel extends Model {
         $id_promo = $this->pdo->lastInsertId();
         $req->closeCursor();
 
-        $sql_user = "INSERT INTO " . $this->tables['TABLE_USERS'] . " VALUES (?, ?, ?, ?,0, ?, ?, ?, ?, NULL)";
+        $sql_user = "INSERT INTO " . $this->tables['TABLE_USERS'] . " 
+                        VALUES (?, ?, ?, ?,0, ?, ?, ?, ?, NULL)";
         $req = $this->pdo->prepare($sql_user);
         $req->bindValue(1, $i['insc_user'], PDO::PARAM_STR);
         $req->bindValue(2, sha1($i['insc_pass'] . CLE_SHA_PERSO), PDO::PARAM_STR);
@@ -96,7 +103,8 @@ class UserModel extends Model {
     }
 
     function ajoute_unvalidated_user($id, $clef) {
-        $sql = "INSERT INTO " . $this->tables['TABLE_UNVALIDATED_USER'] . " VALUES (?,?,?,NULL)";
+        $sql = "INSERT INTO " . $this->tables['TABLE_UNVALIDATED_USER'] . " 
+                    VALUES (?,?,?,NULL)";
         $req = $this->pdo->prepare($sql);
 
         $req->bindValue(1, $id, PDO::PARAM_INT);
@@ -123,11 +131,14 @@ class UserModel extends Model {
                 FROM (
                 (
                 " . $this->tables['TABLE_USERS'] . " u
-                LEFT JOIN " . $this->tables['TABLE_ETAB'] . " e ON u.etab = e.id
+                LEFT JOIN " . $this->tables['TABLE_ETAB'] . " e 
+                    ON u.etab = e.id
                 )
-                LEFT JOIN " . $this->tables['TABLE_PROMO'] . " p ON u.promo = p.id
+                LEFT JOIN " . $this->tables['TABLE_PROMO'] . " p 
+                    ON u.promo = p.id
                 )
-                LEFT JOIN " . $this->tables['TABLE_TYPE_ETAB'] . " t ON e.type = t.id
+                LEFT JOIN " . $this->tables['TABLE_TYPE_ETAB'] . " t 
+                    ON e.type = t.id
                     ORDER BY u.id DESC";
         } else {
             $sql = "SELECT * FROM " . $this->tables['TABLE_UNVALIDATED_USER'];
@@ -136,25 +147,26 @@ class UserModel extends Model {
     }
 
     function maj_last_viste($id) {
-        $sql = "UPDATE users SET last='" . time() . "' WHERE id='{$id}'";
+        $sql = "UPDATE " . $this->tables['TABLE_USERS'] . " SET last='" . time() . "' 
+                WHERE id='{$id}'";
         $this->pdo->exec($sql);
     }
 
     function compte_resultats_valides($id_user) {
-        $sql = "SELECT COUNT(*) nb FROM mot_du_jour mdj 
-        LEFT JOIN resultats r
-        ON mdj.id_resultat=r.id
-        WHERE r.valide='1' AND mdj.id_user='{$id_user}'";
+        $sql = "SELECT COUNT(*) nb FROM " . $this->tables['TABLE_MDJ'] . " mdj 
+                    LEFT JOIN " . $this->tables['TABLE_RESULTATS'] . " r
+                        ON mdj.id_resultat=r.id
+                            WHERE r.valide='1' AND mdj.id_user='{$id_user}'";
 
         $res = $this->pdo->query($sql)->fetch(PDO::FETCH_OBJ);
         return $res->nb;
     }
 
     function compte_resultats_invalides($id_user) {
-        $sql = "SELECT COUNT(*) nb FROM mot_du_jour mdj 
-        LEFT JOIN resultats r
-        ON mdj.id_resultat=r.id
-        WHERE r.valide='9' AND mdj.id_user='{$id_user}'";
+        $sql = "SELECT COUNT(*) nb FROM " . $this->tables['TABLE_MDJ'] . " mdj 
+                    LEFT JOIN " . $this->tables['TABLE_RESULTATS'] . " r
+                        ON mdj.id_resultat=r.id
+                            WHERE r.valide='9' AND mdj.id_user='{$id_user}'";
 
         $res = $this->pdo->query($sql)->fetch(PDO::FETCH_OBJ);
         return $res->nb;
@@ -164,15 +176,18 @@ class UserModel extends Model {
         $sql = "SELECT user, u.id,(
                 SELECT count( * ) score
                 FROM (
-                users u2
-                LEFT JOIN mot_du_jour m2 ON u2.id = m2.id_user
+                " . $this->tables['TABLE_USERS'] . " u2
+                LEFT JOIN " . $this->tables['TABLE_MDJ'] . " m2 
+                    ON u2.id = m2.id_user
                 )
-                LEFT JOIN resultats r2 ON m2.id_resultat = r2.id
+                LEFT JOIN " . $this->tables['TABLE_RESULTATS'] . " r2 
+                    ON m2.id_resultat = r2.id
                 WHERE r2.valide =1
                 AND m2.id_user = u.id
                 )score
-                FROM users u
-                LEFT JOIN mot_du_jour m ON u.id = m.id_user
+                FROM " . $this->tables['TABLE_USERS'] . " u
+                LEFT JOIN " . $this->tables['TABLE_MDJ'] . " m 
+                    ON u.id = m.id_user
                 GROUP BY u.id
                 ORDER BY score DESC";
         return $this->pdo->query($sql)->fetchAll(PDO::FETCH_OBJ);
@@ -183,7 +198,7 @@ class UserModel extends Model {
          * donnant la priorité a celui qui en a le plus pour un score egal
          * et ensuite a celui qui était inscrit avant l'autre
          * 
-         * ensuite on peut inclure ceux qui ont zéro via UNIONen les classant 
+         * ensuite on peut inclure ceux qui ont zéro via UNION en les classant 
          * par ordre de mots joués et d'ancieneté.
          * bordel...déja que j'ai mis 1 heure pour pondre cette requete...   :-)
          */

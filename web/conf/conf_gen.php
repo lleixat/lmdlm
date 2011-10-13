@@ -14,12 +14,6 @@ define("CLE_SHA_PERSO","68bb044c0cc98d78bb4e543565347b48");
 $taille_max_upload_avatar = (1024*1024*5);
 define("TAILLE_MAX_UPLOAD",$taille_max_upload_avatar);
 
-/*
- * debug
-echo "<pre>";
-print_r($_SERVER);
-echo "</pre>";
-*/
 
 if($_SERVER['SERVER_NAME'] == "localhost"){
     // l'url de base a placer dans le head pour qu'il trouve toujours l'arbo parente (artificiellement)

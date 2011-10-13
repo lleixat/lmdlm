@@ -3,7 +3,8 @@
 class MotModel extends Model {
 
     function ajouter_mot($mot) {
-        $sql = "INSERT INTO mots VALUES (?,?,?,0, NULL);";
+        $sql = "INSERT INTO " . $this->tables['TABLE_MOTS'] . " 
+                                            VALUES (?,?,?,0, NULL);";
         $req = $this->pdo->prepare($sql);
         $req->bindValue(1, $mot, PDO::PARAM_STR);
         $req->bindValue(2, User::$id, PDO::PARAM_INT);
@@ -29,17 +30,25 @@ class MotModel extends Model {
             }
         }
         $limit = ($nb) ? "limit 0,{$nb}" : "";
-        $sql = "SELECT * FROM mots {$condition} ORDER BY id DESC {$limit}";
+        $sql = "SELECT * FROM " . $this->tables['TABLE_MOTS'] . " {$condition} O
+                    RDER BY id DESC {$limit}";
         return $this->pdo->query($sql)->fetchAll(PDO::FETCH_OBJ);
     }
     
     function liste_mot_et_posteur(){
-        $sql = "SELECT mot,m.id id_mot,m.valide,m.date,u.user,u.id id_user FROM mots m left join users u on m.proposeur=u.id ORDER BY m.id DESC";
+        $sql = "SELECT mot,m.id id_mot,m.valide,m.date,u.user,u.id id_user 
+                    FROM " . $this->tables['TABLE_MOTS'] . " m 
+                        LEFT JOIN " . $this->tables['TABLE_USERS'] . " u 
+                            ON m.proposeur=u.id 
+                                ORDER BY m.id DESC";
         return $this->pdo->query($sql)->fetchAll(PDO::FETCH_OBJ);
     }
 
     function renvoie_mot_aléatoire() {
-        $sql = "SELECT * FROM mots WHERE valide='1' ORDER BY RAND() LIMIT 0,1";
+        $sql = "SELECT * FROM " . $this->tables['TABLE_MOTS'] . " 
+                    WHERE valide='1' 
+                        ORDER BY RAND() 
+                            LIMIT 0,1";
         return $this->pdo->query($sql)->fetch(PDO::FETCH_OBJ);
     }
 
@@ -57,11 +66,11 @@ class MotModel extends Model {
         $an = date("Y", $heure);
 
         // on verifie si le mot n'a pas déja été assigné pour aujourd'hui
-        $sqla = "SELECT * FROM mot_du_jour mdj LEFT JOIN mots m 
+        $sqla = "SELECT * FROM " . $this->tables['TABLE_MDJ'] . " mdj LEFT JOIN " . $this->tables['TABLE_MOTS'] . " m 
                     ON mdj.id_mot=m.id 
-                    WHERE annee ='{$an}'
-                    AND jour='{$jour}' 
-                    AND id_user='{$id_user}'";
+                        WHERE annee ='{$an}'
+                            AND jour='{$jour}' 
+                                AND id_user='{$id_user}'";
         $res = $this->pdo->query($sqla)->fetch(PDO::FETCH_OBJ);
 
         if ($res === false) {
@@ -71,7 +80,8 @@ class MotModel extends Model {
 
             $hash = substr(md5($id_mot . $jour . $an . $id_user), 10);
 
-            $sqlb = "INSERT INTO mot_du_jour VALUES (?,?,?,?,?,?,0,NULL)";
+            $sqlb = "INSERT INTO " . $this->tables['TABLE_MDJ'] . " 
+                                                VALUES (?,?,?,?,?,?,0,NULL)";
 
             $req = $this->pdo->prepare($sqlb);
             $req->bindValue(1, $id_mot);
@@ -98,14 +108,15 @@ class MotModel extends Model {
         if($id_user == null)
             return false;
         $sql = "SELECT heure,mot,id_resultat 
-                FROM mot_du_jour mdj 
-                LEFT JOIN mots m
+                FROM " . $this->tables['TABLE_MDJ'] . " mdj 
+                LEFT JOIN " . $this->tables['TABLE_MOTS'] . " m
                 ON mdj.id_mot=m.id
                 WHERE mdj.id_user='{$id_user}'
                 AND mdj.id NOT IN
-                    (SELECT id FROM mot_du_jour 
-                    WHERE id_user='{$id_user}' AND jour='{$jour}' AND annee='{$an}')
-                ORDER BY mdj.id DESC";
+                    (SELECT id FROM " . $this->tables['TABLE_MDJ'] . " 
+                        WHERE id_user='{$id_user}' AND jour='{$jour}' 
+                            AND annee='{$an}')
+                                ORDER BY mdj.id DESC";
 
         return $this->pdo->query($sql)->fetchAll(PDO::FETCH_OBJ);
     }
@@ -113,27 +124,33 @@ class MotModel extends Model {
     function renvoie_infos_mot_du_jour() {
         $id_user = User::$id;
         $jour = date("z", time());
-        $sql = "SELECT * FROM mot_du_jour mdj LEFT JOIN mots m 
-                ON mdj.id_mot=m.id 
-                WHERE mdj.id_user='{$id_user}' AND jour='{$jour}'";
+        $sql = "SELECT * FROM " . $this->tables['TABLE_MDJ'] . " mdj 
+                    LEFT JOIN " . $this->tables['TABLE_MOTS'] . " m 
+                        ON mdj.id_mot=m.id 
+                            WHERE mdj.id_user='{$id_user}' 
+                                AND jour='{$jour}'";
         return $this->pdo->query($sql)->fetch(PDO::FETCH_OBJ);
     }
 
     function enregistrer_resultat_du_gars($phrase, $capture) {
         $heure = time();
         $id_user = User::$id; // on met ca pour dire d'avoir un id correct
-        $sql = "INSERT INTO resultats VALUES ('{$heure}','{$phrase}','{$capture}',0,'{$id_user}','',null)";
+        $sql = "INSERT INTO " . $this->tables['TABLE_RESULTATS'] . " 
+           VALUES ('{$heure}','{$phrase}','{$capture}',0,'{$id_user}','',null)";
         $this->pdo->exec($sql);
         return $this->pdo->lastInsertId();
     }
 
     function maj_mdj_attente_validation($id, $h) {
-        $sql = "UPDATE mot_du_jour SET id_resultat='{$id}' WHERE hash='{$h}'";
+        $sql = "UPDATE " . $this->tables['TABLE_MDJ'] . " 
+                    SET id_resultat='{$id}' 
+                        WHERE hash='{$h}'";
         return $this->pdo->exec($sql);
     }
 
     function ce_resultat_est_il_valide($id) {
-        $sql = "SELECT valide FROM resultats WHERE id='{$id}'";
+        $sql = "SELECT valide FROM " . $this->tables['TABLE_RESULTATS'] . " 
+                    WHERE id='{$id}'";
         $res = $this->pdo->query($sql)->fetch(PDO::FETCH_OBJ);
         return $res->valide;
     }
