@@ -1,5 +1,4 @@
-<?php
-?>
+<?php ?>
 <!DOCTYPE html>
 
 <html lang="fr">
@@ -13,7 +12,6 @@
         <script src="js/jquery-1.6.4.min.js"></script>
 
         <meta name="description" content="<?php echo DESCRIPTION ?>">
-
     </head>
     <body>
         <div id="conteneur" class="ombre10">
@@ -24,17 +22,9 @@
             ?>
 
             <div id="content">
-                <h1>yeaahhh <?php echo User::$user; ?> !</h1>
-                <div class="cadre_bleu radius10">
-                <h4>Inscription : ok !</h4>
-                <p>Un mail de validation de ton adresse email vient de t'être envoyé;<br /><br />
-
-                    Clique simplement sur le lien qu'il contient <u>dans les 24 heures</u> pour valider ton compte automatiquement ou il sera mis en attente et tu devras demander a un admin de valider ton compte manuellement.<br />Voila !</p>
-                <p>Merci l'ami, amuse toi bien !</p>
-                </div>
+                <p>Voila votre compte est validé, merci</p>
             </div>
-
-
+            
             <?php
             require LAYOUT_FOOTER;
             ?>

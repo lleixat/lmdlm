@@ -21,11 +21,11 @@
             require LAYOUT_NAV;
             ?>
 
-            <din id="content">
+            <div id="content">
                 <h1 class="titre_page">Page d'accueil</h1>
                 <p>Ici une presentation du truc avec un ou deux captures..?</p>
                 <p>Un truc comme ca quoi</p>
-            </din>
+            </div>
 
 
 

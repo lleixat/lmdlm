@@ -30,12 +30,12 @@ class MotModel extends Model {
             }
         }
         $limit = ($nb) ? "limit 0,{$nb}" : "";
-        $sql = "SELECT * FROM " . $this->tables['TABLE_MOTS'] . " {$condition} O
-                    RDER BY id DESC {$limit}";
+        $sql = "SELECT * FROM " . $this->tables['TABLE_MOTS'] . " {$condition} 
+                    ORDER BY id DESC {$limit}";
         return $this->pdo->query($sql)->fetchAll(PDO::FETCH_OBJ);
     }
-    
-    function liste_mot_et_posteur(){
+
+    function liste_mot_et_posteur() {
         $sql = "SELECT mot,m.id id_mot,m.valide,m.date,u.user,u.id id_user 
                     FROM " . $this->tables['TABLE_MOTS'] . " m 
                         LEFT JOIN " . $this->tables['TABLE_USERS'] . " u 
@@ -60,7 +60,7 @@ class MotModel extends Model {
      */
     function assigne_mot() {
 
-        $id_user = User::$id;
+        $id_user = User::$id;        
         $heure = time();
         $jour = date("z", $heure);
         $an = date("Y", $heure);
@@ -76,24 +76,28 @@ class MotModel extends Model {
         if ($res === false) {
 
             $mot = $this->renvoie_mot_aléatoire();
-            $id_mot = $mot->id;
+            if ($mot) {
+                $id_mot = $mot->id;
 
-            $hash = substr(md5($id_mot . $jour . $an . $id_user), 10);
+                $hash = substr(md5($id_mot . $jour . $an . $id_user), 10);
 
-            $sqlb = "INSERT INTO " . $this->tables['TABLE_MDJ'] . " 
+                $sqlb = "INSERT INTO " . $this->tables['TABLE_MDJ'] . " 
                                                 VALUES (?,?,?,?,?,?,0,NULL)";
 
-            $req = $this->pdo->prepare($sqlb);
-            $req->bindValue(1, $id_mot);
-            $req->bindValue(2, $id_user);
-            $req->bindValue(3, $heure);
-            $req->bindValue(4, $jour);
-            $req->bindValue(5, $an);
-            $req->bindValue(6, $hash, PDO::PARAM_STR);
-            $req->execute();
-
-            return $this->pdo->query($sqla)->fetch(PDO::FETCH_OBJ);
-            ;
+                $req = $this->pdo->prepare($sqlb);
+                $req->bindValue(1, $id_mot);
+                $req->bindValue(2, $id_user);
+                $req->bindValue(3, $heure);
+                $req->bindValue(4, $jour);
+                $req->bindValue(5, $an);
+                $req->bindValue(6, $hash, PDO::PARAM_STR);
+                $req->execute();
+                
+                return $this->pdo->query($sqla)->fetch(PDO::FETCH_OBJ);
+                
+            } else {
+                return false;
+            }
         } else {
             return $res;
         }
@@ -105,7 +109,7 @@ class MotModel extends Model {
         $jour = date("z", time());
         $an = date("Y", time());
         $id_user = User::$id;
-        if($id_user == null)
+        if ($id_user == null)
             return false;
         $sql = "SELECT heure,mot,id_resultat 
                 FROM " . $this->tables['TABLE_MDJ'] . " mdj 

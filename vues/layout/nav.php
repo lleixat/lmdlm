@@ -15,7 +15,7 @@
 
     <a href="version.html" class="radius5">Version</a>
 
-    <a href="version.html#todo" class="radius5">To Do</a>
+    <a href="todo.php" class="radius5">To Do</a>
 
     <?php
     if (User::$rang == 5) {

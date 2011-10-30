@@ -16,7 +16,7 @@ class MotController extends Controller {
         require MODEL . DS . 'MotModel.php';
         $this->mm = new MotModel;
 
-        $this->contenu['html_prop_mot'] = ($this->mm->ajouter_mot($mot) == 1)?"<p>Mot '<b>{$mot}</b>' envoyé ! </p>":"<p>Ca a foiré chef ! Votre mot n'a pas été envoyé! <br />Il est surement déja dans la base... <br /><b>Vérifie !</b></p>";
+        $this->contenu['html_prop_mot'] = ($this->mm->ajouter_mot($mot) == 1) ? "<p>Mot '<b>{$mot}</b>' envoyé ! </p>" : "<p>Ca a foiré chef ! Votre mot n'a pas été envoyé! <br />Il est surement déja dans la base... <br /><b>Vérifie !</b></p>";
         $this->mots_proposes_du_gars();
         $this->liste_tous_les_mots();
 
@@ -86,16 +86,16 @@ class MotController extends Controller {
     }
 
     function liste_tous_les_mots() {
-        
+
         // on ne cree l'objet que si il n'existe pas
         if (!is_object($this->mm)) {
             require MODEL . DS . 'MotModel.php';
             $this->mm = new MotModel;
         }
-        $liste = $this->mm->liste_mots(false,false,true);
+        $liste = $this->mm->liste_mots(false, false, true);
 
         if (count($liste) > 0) {
-            
+
             $html = "<div class='cadre_bleu radius10'>\n<h2>Tous les mots disponibles</h2>\n";
             $mdl_ligne_mot = "<p><span class='mot'>%s</span> 
                                 <img src='%s' alt='validation' /> proposé %s </p>\n";
@@ -122,36 +122,41 @@ class MotController extends Controller {
 
         $objmot = $this->mm->assigne_mot();
 
-        $phrase = "";
+        if ($objmot) {
 
-        if ($objmot->id_resultat == 0) {
-            $lien_resultat = "<p>
+            $phrase = "";
+
+            if ($objmot->id_resultat == 0) {
+                $lien_resultat = "<p>
                 <a href='mot_reussite/signaler-ma-reussite.html' 
                             class='bouton radius5'>J'ai réussi !</a></p>";
-            $phrase .= "<p>Voila ton mot d'aujourd'hui : <div class='bigbig'>".ucfirst($objmot->mot)."</div> bonne chance !</p>" . $lien_resultat;
-        } else {
-            $lien_resultat = "";
+                $phrase .= "<p>Voila ton mot d'aujourd'hui : <div class='bigbig'>" . ucfirst($objmot->mot) . "</div> bonne chance !</p>" . $lien_resultat;
+            } else {
+                $lien_resultat = "";
 
-            $etat_de_validation = $this->mm->ce_resultat_est_il_valide($objmot->id_resultat);
+                $etat_de_validation = $this->mm->ce_resultat_est_il_valide($objmot->id_resultat);
 
-            // on va chercher l'image qui correspond au statut du resultat
-            switch ($etat_de_validation) {
-                case "0": // en attente de validation 
-                    $image = "<img src='imgs/pendule.png' alt='img statut' />";
-                    $phrase .= "<p>{$image} Ajourd'hui ton mot était '<b>{$objmot->mot}</b>',<br /> tu dois attendre la validation...</b>'</p>" . $lien_resultat;
-                    break;
-                case "1": // validé
-                    $image = "<img src='imgs/valide.png' alt='img statut' />";
-                    $phrase .= "<p>{$image} Ta tentative à été validée pour le mot <b>{$objmot->mot}</b> !</p>" . $lien_resultat;
-                    break;
-                case "9": // refusé par un enculé^^
-                    $image = "<img src='imgs/nonvalide.png' alt='img statut' />";
-                    $phrase .= "<p>{$image} Tentative pour le mot '<b>{$objmot->mot}</b>' refusée, tu feras mieux demain...</p>" . $lien_resultat;
-                    break;
-                default :
-                    $image = "";
-                    break;
+                // on va chercher l'image qui correspond au statut du resultat
+                switch ($etat_de_validation) {
+                    case "0": // en attente de validation 
+                        $image = "<img src='imgs/pendule.png' alt='img statut' />";
+                        $phrase .= "<p>{$image} Ajourd'hui ton mot était '<b>{$objmot->mot}</b>',<br /> tu dois attendre la validation...</b>'</p>" . $lien_resultat;
+                        break;
+                    case "1": // validé
+                        $image = "<img src='imgs/valide.png' alt='img statut' />";
+                        $phrase .= "<p>{$image} Ta tentative à été validée pour le mot <b>{$objmot->mot}</b> !</p>" . $lien_resultat;
+                        break;
+                    case "9": // refusé par un enculé^^
+                        $image = "<img src='imgs/nonvalide.png' alt='img statut' />";
+                        $phrase .= "<p>{$image} Tentative pour le mot '<b>{$objmot->mot}</b>' refusée, tu feras mieux demain...</p>" . $lien_resultat;
+                        break;
+                    default :
+                        $image = "";
+                        break;
+                }
             }
+        } else {
+            $phrase = '<p>Aucun mots disponibles pour l\'instant</p>';
         }
 
 
@@ -172,26 +177,26 @@ class MotController extends Controller {
             $html = "";
             $mdl = "<p>%s LMDLM était : <b>%s</b> %s</p>";
             foreach ($liste as $motjour) {
-                
-                $id_resultat  = $motjour->id_resultat;
-                if($id_resultat > 0){
-                $valide = $this->mm->ce_resultat_est_il_valide($id_resultat);
 
-                switch($valide){
-                    case "0":
-                        $img = "<img src='imgs/pendule.png' alt='statut' title='Tentative en attente de validation' />";
-                        break;
-                    case "1":
-                        $img = "<img src='imgs/valide.png' alt='statut' title='Tentative validée' />";
-                        break;
-                    case "9":
-                        $img = "<img src='imgs/nonvalide.png' alt='statut' title='Tentative refusée' />";
-                        break;
-                }
+                $id_resultat = $motjour->id_resultat;
+                if ($id_resultat > 0) {
+                    $valide = $this->mm->ce_resultat_est_il_valide($id_resultat);
+
+                    switch ($valide) {
+                        case "0":
+                            $img = "<img src='imgs/pendule.png' alt='statut' title='Tentative en attente de validation' />";
+                            break;
+                        case "1":
+                            $img = "<img src='imgs/valide.png' alt='statut' title='Tentative validée' />";
+                            break;
+                        case "9":
+                            $img = "<img src='imgs/nonvalide.png' alt='statut' title='Tentative refusée' />";
+                            break;
+                    }
                 } else {
-                     $img = "<img src='imgs/excla.png' alt='statut' title='Tentative non réussie dans les temps' />";
+                    $img = "<img src='imgs/excla.png' alt='statut' title='Tentative non réussie dans les temps' />";
                 }
-                
+
                 $date = ucfirst($this->formatteDate($motjour->heure));
                 $html.= sprintf($mdl, $date, $motjour->mot, $img);
             }
@@ -326,6 +331,7 @@ class MotController extends Controller {
             $this->affiche_erreur();
         }
     }
+
 }
 
 ?>

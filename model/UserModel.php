@@ -85,7 +85,7 @@ class UserModel extends Model {
         $req->closeCursor();
 
         $sql_user = "INSERT INTO " . $this->tables['TABLE_USERS'] . " 
-                        VALUES (?, ?, ?, ?,0, ?, ?, ?, ?, NULL)";
+                        VALUES (?, ?, ?, ?,1, ?, ?, ?, ?, NULL)";
         $req = $this->pdo->prepare($sql_user);
         $req->bindValue(1, $i['insc_user'], PDO::PARAM_STR);
         $req->bindValue(2, sha1($i['insc_pass'] . CLE_SHA_PERSO), PDO::PARAM_STR);
@@ -191,7 +191,7 @@ class UserModel extends Model {
                 GROUP BY u.id
                 ORDER BY score DESC";
         return $this->pdo->query($sql)->fetchAll(PDO::FETCH_OBJ);
-        
+
         /*
          * peut etre améliorée en incluant une condition d'ordre.
          * faire un autre select qui compte le nombre total de mot joués
@@ -202,6 +202,41 @@ class UserModel extends Model {
          * par ordre de mots joués et d'ancieneté.
          * bordel...déja que j'ai mis 1 heure pour pondre cette requete...   :-)
          */
+    }
+
+    function liste_membres() {
+        $sql = "SELECT user,rang,u.id FROM users u LEFT JOIN unvalidated_user un ON u.id=un.user_id";
+        return $this->pdo->query($sql)->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    function banMembre($id) {
+        $sql = "UPDATE " . $this->tables['TABLE_USERS'] . " SET rang=0 WHERE id=" . $id;
+        $this->pdo->exec($sql);
+    }
+
+    function addMembre($id) {
+        $sql = "UPDATE " . $this->tables['TABLE_USERS'] . " SET rang=2 WHERE id=" . $id;
+        $this->pdo->exec($sql);
+    }
+
+    function addAdmin($id) {
+        $sql = "UPDATE " . $this->tables['TABLE_USERS'] . " SET rang=5 WHERE id=" . $id;
+        $this->pdo->exec($sql);
+    }
+
+    function validerMembre($hash) {
+        $sql = "UPDATE " . $this->tables['TABLE_USERS'] . " u 
+                LEFT JOIN " . $this->tables['TABLE_UNVALIDATED_USER'] . "  un 
+                ON u.id = un.user_id SET u.rang=2 
+                WHERE un.hash=?";
+        $req = $this->pdo->prepare($sql);
+        $req->bindValue(1, $hash, PDO::PARAM_STR);
+        $req->execute();
+
+        $sql2 = "DELETE FROM " . $this->tables['TABLE_UNVALIDATED_USER'] . " WHERE hash=?";
+        $req2 = $this->pdo->prepare($sql2);
+        $req2->bindValue(1, $hash, PDO::PARAM_STR);
+        $req2->execute();
     }
 
 }

@@ -25,8 +25,8 @@ class UserController extends Controller {
                     $_SESSION['id_user'] = $id_user;
 
                     // retour vers la page precedente suite au login (ou a l'accueil par defaut)
-                    $redir = (isset($this->request->referer))?$this->request->referer:"../accueil.html";
-                    header('Location:'.$redir);
+                    $redir = (isset($this->request->referer)) ? $this->request->referer : "../accueil.html";
+                    header('Location:' . $redir);
                     exit;
                 } else {
                     // erreur de login
@@ -126,7 +126,7 @@ class UserController extends Controller {
         $html = "";
 
         foreach ($list_all as $membre) {
-            $image = (in_array($membre->id, $id_unv)) ? "<img src='imgs/nonvalide.png' alt='validation du compte' style='vertical-align: middle;' />" : "";
+            $image = (in_array($membre->id, $id_unv)) ? "<img src='imgs/pendule.png' alt='img' title='validation du compte' style='vertical-align: middle;' />" : "";
             $resultats_valides = $um->compte_resultats_valides($membre->id);
             $resultats_invalides = $um->compte_resultats_invalides($membre->id);
             if ($resultats_valides > 0 || $resultats_invalides > 0) {
@@ -162,7 +162,7 @@ class UserController extends Controller {
                                         require CONTROLLER . DS . 'FileController.php';
                                         $fileController = new FileController();
 
-                                        if ($fileController->upload_fichier($f, array("image/jpeg"))) {
+                                        if ($fileController->upload_fichier($f, array("image/jpeg", "image/png"))) {
                                             // le fichier a été uploadé comme il faut
                                             // on peut lancer l'inscription dans la base
                                             // on recupere le nom de l'image qui a été créé
@@ -174,16 +174,28 @@ class UserController extends Controller {
                                             if ($id !== false && $id > 0) {
 
                                                 // on renseigne la table unvalidated_user
-                                                $clef = md5($id) . md5($p['insc_mail']) . md5("lemodlamort");
+                                                $clef = substr(md5($id) . md5($p['insc_mail']), 0, 20) . md5("lemodlamort");
                                                 $clef = sha1($clef);
                                                 $userModel->ajoute_unvalidated_user($id, $clef);
 
-                                                $_SESSION['login'] = true;
-                                                $_SESSION['id_user'] = $id;
+                                                /*
+                                                 * On ne logue pas le type des son inscription
+                                                  $_SESSION['login'] = true;
+                                                  $_SESSION['id_user'] = $id;
+                                                 * 
+                                                 */
+
+                                                $lien_validation = "admin_validerMembre/$clef/validation-de-mon-compte.html";
+                                                $fichier_mail = VUES . DS . 'mail' . DS . 'mail-validation.php';
+                                                $contenu_mail = sprintf(file_get_contents($fichier_mail), filter_var($p['insc_user'], FILTER_SANITIZE_STRING), URL_BASE . $lien_validation);
+
+                                                $message_txt = "voila le lien de validation de votre compte : " . $lien_validation;
+
+                                                $this->envoyer_mail($contenu_mail, filter_var($p['insc_mail'], FILTER_SANITIZE_EMAIL), $message_txt);
 
 
-                                                /* redirection a revoir plus tard
-                                                 * vers une page qui lui dit de valider le mail avant 48heures
+                                                /*
+                                                 * redirection vers une page qui lui dit de valider le mail avant 48heures
                                                  */
 
                                                 header('Location:../user_juste-inscrit.html');
@@ -245,21 +257,60 @@ class UserController extends Controller {
     function topScore() {
         $um = new UserModel;
         $liste = $um->liste_par_score();
-        
+
         $html = "";
         $mdl_lienUser = "<a href='user_pageMembre/%d/user_%s.html' class='lien_user'>%s</a>";
         $mdl_ligne = "<p><span class='user'>%s</span> score : %d MDLM <span class='barre radius5' style='width:%dpx;'></span></p>";
-        
-        foreach($liste as $user){            
-            $score = ($user->score > 320)?320:$user->score;
-            $lien = sprintf($mdl_lienUser,$user->id,$this->formatrewriting($user->user),$user->user);
-            $html.= sprintf($mdl_ligne,$lien,$user->score,$score);
+
+        foreach ($liste as $user) {
+            $score = ($user->score > 320) ? 320 : $user->score;
+            $lien = sprintf($mdl_lienUser, $user->id, $this->formatrewriting($user->user), $user->user);
+            $html.= sprintf($mdl_ligne, $lien, $user->score, $score);
         }
-        
+
         $this->contenu['liste'] = $html;
-        
+
         $file = VUES . DS . $this->request->dossier . DS . $this->request->vue;
         $this->afficher_vue($file);
+    }
+
+    function envoyer_mail($message_html, $mail, $message_txt) {
+
+        if (!preg_match("#^[a-z0-9._-]+@(hotmail|live|msn).[a-z]{2,4}$#", $mail)) { // On filtre les serveurs qui rencontrent des bogues.
+            $passage_ligne = "\r\n";
+        } else {
+            $passage_ligne = "\n";
+        }
+
+        $boundary = "-----=" . md5(rand());
+        //==========
+        //=====Définition du sujet.
+        $sujet = "Bienvenue sur LMDLM";
+        //=========
+        //=====Création du header de l'e-mail.
+        $header = "From: \"No Reply\"<postmaster@kadur-arnaud.fr>" . $passage_ligne;
+        $header.= "Reply-to: \"No Reply\" <postmaster@kadur-arnaud.fr>" . $passage_ligne;
+        $header.= "MIME-Version: 1.0" . $passage_ligne;
+        $header.= "Content-Type: multipart/alternative;" . $passage_ligne . " boundary=\"$boundary\"" . $passage_ligne;
+        //==========
+        //=====Création du message.
+        $message = $passage_ligne . "--" . $boundary . $passage_ligne;
+        //=====Ajout du message au format texte.
+        $message.= "Content-Type: text/plain; charset=\"ISO-8859-1\"" . $passage_ligne;
+        $message.= "Content-Transfer-Encoding: 8bit" . $passage_ligne;
+        $message.= $passage_ligne . $message_txt . $passage_ligne;
+        //==========
+        $message.= $passage_ligne . "--" . $boundary . $passage_ligne;
+        //=====Ajout du message au format HTML
+        $message.= "Content-Type: text/html; charset=\"ISO-8859-1\"" . $passage_ligne;
+        $message.= "Content-Transfer-Encoding: 8bit" . $passage_ligne;
+        $message.= $passage_ligne . $message_html . $passage_ligne;
+        //==========
+        $message.= $passage_ligne . "--" . $boundary . "--" . $passage_ligne;
+        $message.= $passage_ligne . "--" . $boundary . "--" . $passage_ligne;
+        //==========
+        //=====Envoi de l'e-mail.
+        mail($mail, $sujet, $message, $header);
     }
 
 }

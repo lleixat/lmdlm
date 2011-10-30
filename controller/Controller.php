@@ -25,24 +25,31 @@ class Controller {
      * @return bool Retourne true si ca marche et false sinon.
      */
     function afficher_vue($file) {
-        $contenu = $this->contenu;
-        if (file_exists($file)) {
+        
+        // si le gars est banni
+        if ($this->verif_ban()) {
+            $file = VUES . DS . 'static' . DS . 'banni.php';
             require $file;
-
-            return true;
         } else {
-            // on tente avec ".php" si le fichier ".html" n'est pas existant
-            $file_html = str_replace(".html", ".php", $file);
-
-            if (file_exists($file_html)) {
-                require $file_html;
+            $contenu = $this->contenu;
+            if (file_exists($file)) {
+                require $file;
 
                 return true;
             } else {
-                $this->set_error("La vue {$file} n'existe pas.");
-                $this->affiche_erreur(PAGE_404);
+                // on tente avec ".php" si le fichier ".html" n'est pas existant
+                $file_html = str_replace(".html", ".php", $file);
 
-                return false;
+                if (file_exists($file_html)) {
+                    require $file_html;
+
+                    return true;
+                } else {
+                    $this->set_error("La vue {$file} n'existe pas.");
+                    $this->affiche_erreur(PAGE_404);
+
+                    return false;
+                }
             }
         }
     }
@@ -95,6 +102,15 @@ class Controller {
         echo "<pre>";
         print_r($array);
         echo "</pre>";
+    }
+
+    function verif_ban() {
+        // si le gars est banni on le redirige
+        if (User::$rang === '0'){            
+            return true;
+        }  else {
+            return false;
+        }
     }
 
 }

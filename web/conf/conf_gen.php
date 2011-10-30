@@ -20,7 +20,7 @@ if($_SERVER['SERVER_NAME'] == "localhost"){
     define("TYPE_ACCES_BASE","local");
     define("URL_BASE","http://localhost/lmdlm/");
 } else {
-        define("TYPE_ACCES_BASE","distant");
+    define("TYPE_ACCES_BASE","distant");
     define("URL_BASE","http://".$_SERVER['SERVER_NAME']."/lmdlm/");
 }
 

@@ -19,23 +19,27 @@ class User {
     static $rang;
 
     function __construct($id = false) {
-        if($id == false)
+        if ($id == false)
             return false;
         $obj = new UserModel();
         $infos = $obj->get_userInfos($id);
-        self::$user = $infos->user;
-        self::$mail = $infos->mail;
-        self::$first = $infos->inscription;
-        self::$last = $infos->last;
-        self::$etab = $infos->type_etab;
-        self::$promo = $infos->promo;
-        self::$image = $infos->image;
-        self::$rang = $infos->rang;
-        self::$id = $id;
-        self::$user_url = $this->formatrewriting(self::$user);
-        
-        // mise a jour du dernier passage
-        $obj->maj_last_viste(self::$id);
+        if ($infos) {
+            self::$user = $infos->user;
+            self::$mail = $infos->mail;
+            self::$first = $infos->inscription;
+            self::$last = $infos->last;
+            self::$etab = $infos->type_etab;
+            self::$promo = $infos->promo;
+            self::$image = $infos->image;
+            self::$rang = $infos->rang;
+            self::$id = $id;
+            self::$user_url = $this->formatrewriting(self::$user);
+
+            // mise a jour du dernier passage
+            $obj->maj_last_viste(self::$id);
+        } else {
+            session_destroy();
+        }
     }
 
     function formatrewriting($chaine) {
