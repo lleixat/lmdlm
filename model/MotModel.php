@@ -56,6 +56,7 @@ class MotModel extends Model {
      *  verifie que le mot quotidien n'a pas encore été assigné
      *  et dans ce cas assigne un mot aléatoire, dans le cas ou le mot aurait déja été
      *  désigné il est renvoyé au motController
+     *
      *  @return object Objet des infos du mot assigné pour le type
      */
     function assigne_mot() {
@@ -136,11 +137,11 @@ class MotModel extends Model {
         return $this->pdo->query($sql)->fetch(PDO::FETCH_OBJ);
     }
 
-    function enregistrer_resultat_du_gars($phrase, $capture) {
+    function enregistrer_resultat_du_gars($id_user, $mot, $phrase, $capture) {
         $heure = time();
         $id_user = User::$id; // on met ca pour dire d'avoir un id correct
         $sql = "INSERT INTO " . $this->tables['TABLE_RESULTATS'] . " 
-           VALUES ('{$heure}','{$phrase}','{$capture}',0,'{$id_user}','',null)";
+           VALUES ('{$id_user}','{$mot}','{$heure}','{$phrase}','{$capture}',0,{$id_user},'',null)";
         $this->pdo->exec($sql);
         return $this->pdo->lastInsertId();
     }

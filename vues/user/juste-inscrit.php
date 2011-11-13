@@ -8,8 +8,11 @@
         <base href="<?php echo URL_BASE; ?>" />
         <title><?php echo TITLE ?></title>
 
-        <link rel="stylesheet" media="screen" href="css/general.css" />
-        <link rel="stylesheet" media="screen" href="css/trick.css" />
+        <link rel="stylesheet" media="screen" href="css/text.css" />
+        <link rel="stylesheet" media="screen" href="css/grid.css" />
+
+        <link href="favicon.png" rel="shortcut icon" />
+
         <script src="js/jquery-1.6.4.min.js"></script>
 
         <meta name="description" content="<?php echo DESCRIPTION ?>">
@@ -18,18 +21,17 @@
     <body>
         <div id="conteneur" class="ombre10">
             <?php
-            require LAYOUT_USER_BAR;
             require LAYOUT_HEADER;
             require LAYOUT_NAV;
             ?>
 
             <div id="content">
-                <h1>yeaahhh <?php echo User::$user; ?> !</h1>
-                <div class="cadre_bleu radius10">
+                <h2>yeaahhh <?php echo User::$user; ?> !</h2>
+                <div>
                 <h4>Inscription : ok !</h4>
-                <p>Un mail de validation de ton adresse email vient de t'être envoyé;<br /><br />
-
-                    Clique simplement sur le lien qu'il contient <u>dans les 24 heures</u> pour valider ton compte automatiquement ou il sera mis en attente et tu devras demander a un admin de valider ton compte manuellement.<br />Voila !</p>
+                <p>Un mail de validation vient de t'être envoyé à l'adresse que tu as renseigné.<br />
+<br />
+                    Clique simplement sur le lien qu'il contient <u>dans les 24 heures</u> pour valider ton compte automatiquement. Dans le cas contraire, ta demande d'inscription sera mise en attente et tu devras demander l'intervention d'un admin pour valider ton compte.</p><p>Voilà !</p>
                 <p>Merci l'ami, amuse toi bien !</p>
                 </div>
             </div>

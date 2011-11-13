@@ -3,18 +3,25 @@ $um = new UserModel();
 $liste = $um->get_type_etab();
 $opt = "";
 $mdl_opt = "<option value='%d'>%s</option>\n";
-foreach ($liste as $type){$opt .= sprintf($mdl_opt,$type->id,$type->nom);}?>
+foreach ($liste as $type){$opt .= sprintf($mdl_opt,$type->id,$type->nom);}
+?>
 
 <!DOCTYPE html>
 
 <html lang="fr">
     <head>
         <meta charset="UTF-8">
+        <meta name="description" content="<?php echo DESCRIPTION ?>" />
 
         <title><?php echo TITLE ?></title>
-        <link rel="stylesheet" media="screen" href="css/general.css" />
+
+        <link rel="stylesheet" media="screen" href="css/text.css" />
+        <link rel="stylesheet" media="screen" href="css/grid.css" />
         <link rel="stylesheet" media="screen" href="css/inscription.css" />
-        <link rel="stylesheet" media="screen" href="css/trick.css" />
+
+        <link href="favicon.png" rel="shortcut icon" />
+
+
         <script src="js/jquery-1.6.4.min.js" type="text/javascript"></script>
         <script src="js/jquery.easing.1.3.js" type="text/javascript"></script>
         <script src="js/form_inscription.js" type="text/javascript"></script>
@@ -24,102 +31,87 @@ foreach ($liste as $type){$opt .= sprintf($mdl_opt,$type->id,$type->nom);}?>
 
         <script type="text/javascript" src="tools/Qaptcha_v3.0/jquery/QapTcha.jquery.js"></script>
         <link rel="stylesheet" media="screen" href="tools/Qaptcha_v3.0/jquery/QapTcha.jquery.css" />
-        <meta name="description" content="<?php echo DESCRIPTION ?>">
+
     </head>
+
     <body>
-        <div id="conteneur" class="ombre10">
+        <div id="conteneur">
             <?php
-            require LAYOUT_USER_BAR;
             require LAYOUT_HEADER;
             require LAYOUT_NAV;
             ?>
 
             <div id="content">
-                <h1 class="titre_page">Inscription</h1>
+                <h2 class="titre_page">Inscription</h2>
 
 
                 <form action="user_inscription/accueil.html" id="insc_form" method="post" enctype="multipart/form-data">
-                    <div id="cadre_etapes" class="radius20">
+                    <div id="cadre_etapes">
                         <div id="translider">
 
 
                             <div id="insc_step1" class="insc_steps">
-                                <h3>Utilisateur - étape 1/4</h3>
+                                <h4>Utilisateur - étape 1/4</h4>
                                 <p>
                                     <label for="insc_user">Utilisateur</label>
                                     <input type="text" name="insc_user" id="insc_user" />
-                                </p>
-                                <p>
                                     <label for="insc_pass">Mot de passe</label>
                                     <input type="password" name="insc_pass" id="insc_pass" />
-                                </p>
-                                <p>
                                     <label for="insc_pass2">Confirmation</label>
                                     <input type="password" name="insc_pass2" id="insc_pass2" />
-                                </p>
-
-                                <p>
-                                    <label for="insc_user">E-mail</label>
+                                    <label for="insc_user">Émail</label>
                                     <input type="text" name="insc_mail" id="insc_mail" />
-                                </p>
-                                <p>
-                                    <input type="button" value="" class="insc_btnSuivant" />
+                                    <p>
+                                        <input type="button" value="Poursuivre →" class="insc_btnSuivant" />
+                                    </p>
                                 </p>
                             </div>
 
 
 
                             <div id="insc_step2" class="insc_steps">
-                                <h3>Avatar - étape 2/4</h3>
+                                <h4>Avatar - étape 2/4</h4>
+                                <p><label for="insc_avatar">Choisissez un avatar :</label></p>
+                                <p><input type="file" name="insc_avatar" id="insc_avatar" /></p>
                                 <p>
-                                    <label for="insc_avatar">Choisissez un avatar</label>
-                                    <input type="file" name="insc_avatar" id="insc_avatar" />
-                                </p>
-                                <p>
-                                    <input type="button" value="" class="insc_btnPrecedent" />
-                                    <input type="button" value="" class="insc_btnSuivant" />
+                                    <input type="button" value="← Retour" class="insc_btnPrecedent" />
+                                    <input type="button" value="Poursuivre →" class="insc_btnSuivant" />
                                 </p>
                             </div>
 
 
 
                             <div id="insc_step3" class="insc_steps">
-                                <h3>Etablissement -étape 3/4</h3>
+                                <h4>Établissement - étape 3/4</h4>
                                 <p>
                                     <label for="insc_type_etab">Type d'établissement</label>
                                     <select name="insc_type_etab" id="insc_type_etab">
-                                        <option value="0" disabled="disabled" selected="selected">Choisir établissement</option>
+                                        <option value="0" disabled="disabled" selected="selected">Choisir établissement :</option>
                                         <?php
                                         echo $opt;
                                         ?>
                                     </select>
-                                </p>
-                                <p>
                                     <label for="insc_ville_etab">Ville</label>
                                     <input type="text" name="insc_ville_etab" id="insc_ville_etab" />
-                                </p>
-                                <p>
                                     <label for="insc_promo_etab">Promo</label>
                                     <input type="text" name="insc_promo_etab" id="insc_promo_etab" />
-                                </p>
-
-                                <p>
-                                    <input type="button" value="" class="insc_btnPrecedent" />
-                                    <input type="button" value="" class="insc_btnSuivant" />
+                                    <p>
+                                        <input type="button" value="← Retour" class="insc_btnPrecedent" />
+                                        <input type="button" value="Poursuivre →" class="insc_btnSuivant" />
+                                    </p>
                                 </p>
                             </div>
 
 
 
                             <div id="insc_step4" class="insc_steps">
-                                <h3>Validation - étape finale</h3>
+                                <h3>Validation - étape 4/4</h3>
                                 <div id="cadre_captcha">
                                     <div class="QapTcha"></div>
                                 </div>
-
                                 <p>
-                                    <input type="button" value="" class="insc_btnPrecedent" />
-                                    <input type="submit" value="" id="insc_btn_inscription" />
+                                    <input type="button" value="← Retour" class="insc_btnPrecedent" />
+                                    <input type="submit" value="Valider" id="insc_btn_inscription" />
                                 </p>
                             </div>
 
@@ -127,12 +119,12 @@ foreach ($liste as $type){$opt .= sprintf($mdl_opt,$type->id,$type->nom);}?>
                     </div>
 
                 </form>
-                <h3>Note</h3>
-                <p>Ajouter loader pour autorisation déblocage apres glissement</p>
-                <p>ajouter loader pendant upload du formulaire</p>
-                <p>enregistrement info sensées etres correctes en local storage pour les remettre si le serveur refuse une ou plusieur cases (ne pas se fier au JS pour la sécu)</p>
-                <p>Ajouter un systeme de signalement des champs mal renseignés</p>
-                <p>Ajouter ce texte dans le broyeur de l'objet form</p>
+                <!--<h3>Note</h3>-->
+                <!--<p>Ajouter loader pour autorisation déblocage après glissement</p>-->
+                <!--<p>ajouter loader pendant upload du formulaire</p>-->
+                <!--<p>enregistrement info sensées etres correctes en local storage pour les remettre si le serveur refuse une ou plusieur cases (ne pas se fier au JS pour la sécu)</p>-->
+                <!--<p>Ajouter un systeme de signalement des champs mal renseignés</p>-->
+                <!--<p>Ajouter ce texte dans le broyeur de l'objet form</p>-->
             </div>
 
 

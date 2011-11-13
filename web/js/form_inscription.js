@@ -162,7 +162,7 @@ $(document).ready(function(){
         signal : function(id){
             this.debug && console.log("     signaler : " + id);
             var element = document.getElementById(id);
-            $(element).animate({backgroundColor:"#04598F"},200);
+            $(element).animate({backgroundColor:"#FF8279"},200);
         }
     }
 

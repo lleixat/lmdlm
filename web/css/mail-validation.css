@@ -1,0 +1,15 @@
+@font-face {
+    font-family: "Penguin";
+    src: url("../fonts/PenguinAttack.ttf") format("truetype"), url("../fonts/PenguinAttack.otf") format("opentype");
+}
+h1 {
+    font-family:"Penguin";
+}
+
+h2 {
+
+}
+
+p {
+    font-family:"Times New Roman",Georgia,Serif;
+}

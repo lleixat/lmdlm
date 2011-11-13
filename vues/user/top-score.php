@@ -6,47 +6,25 @@
         <base href="<?php echo URL_BASE; ?>" />
         <title><?php echo TITLE ?></title>
 
-        <link rel="stylesheet" media="screen" href="css/general.css" />
-        <link rel="stylesheet" media="screen" href="css/trick.css" />
-        <script src="js/jquery-1.6.4.min.js"></script>
+        <link rel="stylesheet" media="screen" href="css/text.css" />
+        <link rel="stylesheet" media="screen" href="css/grid.css" />
+
+        <link href="favicon.png" rel="shortcut icon" />
 
         <meta name="description" content="<?php echo DESCRIPTION ?>">
         
         
-        <style type="text/css">
-            span.user{
-                display: inline-block;
-                text-align: right;
-                width: 200px;
-            }
-            a.lien_user{
-                  text-align: right;
-                font-weight: bold;
-                color: #ADE0E0;
-                text-decoration: none;
-            }
-            p{
-                margin: 0;
-            }
-            span.barre{
-                background: transparent url(imgs/bleubarre.jpg) repeat-x;
-                height: 10px;
-                display: inline-block;
-            }
-        </style>
-        
     </head>
     <body>
-        <div id="conteneur" class="ombre10">
+        <div id="conteneur">
             <?php
-            require LAYOUT_USER_BAR;
             require LAYOUT_HEADER;
             require LAYOUT_NAV;
             ?>
 
             <div id="content">
-                <h1>Top score</h1>
-                <div class="cadre_bleu radius10">
+                <h2>Top score</h2>
+                <div class="embed_block">
                     <?php
                     echo $this->contenu['liste'];
                     ?>

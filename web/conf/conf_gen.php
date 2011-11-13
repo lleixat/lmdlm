@@ -2,7 +2,7 @@
 
 // title est description de la page par defaut
 define("TITLE","Le Mot De La Mort");
-define("DESCRIPTION","La description du truc");
+define("DESCRIPTION","Le service qui fait grincer les dents");
 
 // mode d'utilisation dev/prod
 define("MODE","dev");
@@ -15,10 +15,11 @@ $taille_max_upload_avatar = (1024*1024*5);
 define("TAILLE_MAX_UPLOAD",$taille_max_upload_avatar);
 
 
-if($_SERVER['SERVER_NAME'] == "localhost"){
+if($_SERVER['SERVER_NAME'] == "private"){
     // l'url de base a placer dans le head pour qu'il trouve toujours l'arbo parente (artificiellement)
     define("TYPE_ACCES_BASE","local");
-    define("URL_BASE","http://localhost/lmdlm/");
+    //define("URL_BASE","http://localhost/lmdlm/");
+    define("URL_BASE","http://".$_SERVER['SERVER_NAME']."/lmdlm/");
 } else {
     define("TYPE_ACCES_BASE","distant");
     define("URL_BASE","http://".$_SERVER['SERVER_NAME']."/lmdlm/");

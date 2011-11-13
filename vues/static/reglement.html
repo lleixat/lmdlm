@@ -1,0 +1,57 @@
+<?php ?>
+<!DOCTYPE html>
+
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <base href="<?php echo URL_BASE; ?>" />
+        <title><?php echo TITLE ?></title>
+
+        <link rel="stylesheet" media="screen" href="css/text.css" />
+        <link rel="stylesheet" media="screen" href="css/grid.css" />
+
+        <link href="favicon.png" rel="shortcut icon" />
+
+        <script src="js/jquery-1.6.4.min.js"></script>
+
+        <meta name="description" content="<?php echo DESCRIPTION ?>">
+    </head>
+    <body>
+        <div id="conteneur">
+            <?php
+            require LAYOUT_HEADER;
+            require LAYOUT_NAV;
+            ?>
+
+            <div id="content">
+                <h2>Règlement</h2>
+                <div>
+                    <p>On va faire court, on a pas que ça à faire.</p>
+                    <p>Les règles du jeux sont simple et à la portée de tous, mais doivent être écrites pour éviter les
+                        réclamations. Attention, suivez bien ...</p>
+                    <p>Chaque jour le <b>moteur de mot</b> tire au sort un mot (donc) pour chaque joueur.
+                        Ce mot doit être inséré dans un commentaire (preuve à l'appui : <a href="reglement.html#La%20chtit\'%20capture">voir plus bas !</a>) sur un forum CVTIC avant la fin de la semaine.</p>
+                    <p>Pour que votre semaine soit validée et que vous apparaissiez dans le <b>Top of ze semaine</b>, on doit trouver impérativement :</p>
+                    <h4>La phrase incluant LMDLM</h4>
+                    <p>Elle permet de déclarer à la communauté votre forfait. L'inclure permet aussi d'éviter à la communauté de farfouiller partout et se perdre dans les liens pour la ressituer dans son contexte.</p>
+                    <h4>La chtit' capture</h4>
+                    <p>Un petit dessin valant mieux qu'un longue explication, la capture permet deux choses :
+                        <ul>
+                            <li>Elle permet de <b>prouver et valider</b> rapidement votre placement du <b>mot de la mort</b>.</li>
+                            <li>Elle donne aussi la possibilité de replacer dans son contexte la phrase qui va bien, <b>même sur des forums indisponibles aux autres usagers</b> (nécessitant par exemple une authentification).</li>
+                        </ul>
+                    </p>
+                    <h4>Notation</h4>
+                    <p>La notation est à l'image du reste : simplisme !</p>
+                    <p>A venir...</p>
+
+                    <p>Bonne chance !</p>
+                </div>
+            </div>
+
+            <?php
+            require LAYOUT_FOOTER;
+            ?>
+        </div>
+    </body>
+</html>

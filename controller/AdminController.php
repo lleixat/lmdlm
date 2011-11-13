@@ -25,7 +25,7 @@ class AdminController extends Controller {
 
 
         if ($liste !== false && count($liste) > 0) {
-            $cadre = "<h3>Validation du resultat</h3>\n";
+            $cadre = "<h3>Validation du résultat</h3>\n";
             foreach ($liste as $r) {
 
                 if ($r->capture !== "") {
@@ -33,7 +33,7 @@ class AdminController extends Controller {
                     $capture = $dossier_img . "/" . $r->capture;
                     $image = "<img src='{$capture}' alt='capture' class='capture' />";
                 } else {
-                    $image = "<p>*[probleme d'image..]*</p>";
+                    $image = "<p class='error'>*[ Problème d'image... ]*</p>";
                 }
 
                 $lien_non = "admin_refuserResultat/{$r->id_resultat}/administrer-resultat.html";
@@ -42,26 +42,26 @@ class AdminController extends Controller {
                 $date_mdlm = $this->formatteDate($r->heure);
 
                 $phrase = "";
-                $phrase .= "<p>{$date_mdlm} <b>{$r->user}</b> a recu le MDLM :</p>";
-                $phrase .= "<div class='bigbig'>" . ucfirst($r->mot) . "</div>";
+                $phrase .= "<p>{$date_mdlm} <b>{$r->user}</b> a reçu le mot :</p>";
+                $phrase .= "<p class='bigbig'>" . ucfirst($r->mot) . "</p>";
 
                 $txt = str_replace($r->mot, "<span class='lmdlm'>{$r->mot}</span>", $r->phrase);
 
-                $phrase .= "<p>Il a placé le mot dans la phrase suivante :</p>
-                            <span class='phrase radius5'>" . ucfirst(nl2br($txt)) . "</span>";
-                $phrase .= "<p>Voici sa capture d'écran :</p>";
+                $phrase .= "<h4>Il a placé le mot dans la phrase suivante :</h4>
+                            <p class='phrase'>" . ucfirst(nl2br($txt)) . "</p>";
+                $phrase .= "<h4>Capture d'écran :</h4>";
 
                 $phrase .= $image;
 
-                $phrase .= "<p>Valider son MDLM ? 
-                            <a href='{$lien_oui}' class='bouton radius5'>oui</a>
-                            <a href='{$lien_non}' class='bouton radius5'>non</a></p>";
+                $phrase .= "<p class='validation'>Valider son Mot ? 
+                            <a href='{$lien_oui}'>oui</a> |
+                            <a href='{$lien_non}'> nan !</a></p>";
 
-                $cadre .= "<div class='cadre_bleu radius10'>{$phrase}</div>\n";
+                $cadre .= "<div>{$phrase}</div>\n";
             }
         } else {
-            $phrase = "<h3>Validation du resultat</h3><p>Rien a valider, a demain.</p>";
-            $cadre = "<div class='cadre_bleu radius10'>{$phrase}</div>\n";
+            $phrase = "<h3>Validation du résultat</h3><p>Rien à valider, à demain.</p>";
+            $cadre = "<div>{$phrase}</div>\n";
         }
 
 
@@ -73,7 +73,7 @@ class AdminController extends Controller {
     function refuserResultat($id) {
         // si le mec n'est pas admin on l'envoi se faire foutre
         if (User::$rang < 5) {
-            $this->error = "Tes admin depuis quand toi ?";
+            $this->error = "T'es admin depuis quand toi ?";
             $this->affiche_erreur();
         }
 
@@ -82,7 +82,7 @@ class AdminController extends Controller {
 
         $this->am->refuser_un_resultat($id);
 
-        $contenu = "<h1>Administration</h1>";
+        $contenu = "<h2>Administration</h2>";
         $contenu.= "<p>Vous avez refusé le resultat du gars, c'est la vie.</p>";
 
         $this->contenu['html'] = $contenu;
@@ -94,7 +94,7 @@ class AdminController extends Controller {
     function accepterResultat($id) {
         // si le mec n'est pas admin on l'envoi se faire foutre
         if (User::$rang < 5) {
-            $this->error = "Tes admin depuis quand toi ?";
+            $this->error = "T'es admin depuis quand toi ?";
             $this->affiche_erreur();
         }
 
@@ -103,8 +103,8 @@ class AdminController extends Controller {
 
         $this->am->accepter_un_resultat($id);
 
-        $contenu = "<h1>Administration</h1>";
-        $contenu.= "<p>Vous avez accepté le resultat du gars, quelle bonté.</p>";
+        $contenu = "<h2>Administration</h2>";
+        $contenu.= "<p>Vous avez accepté le résultat du gars, quelle bonté.</p>";
 
         $this->contenu['html'] = $contenu;
 
@@ -125,8 +125,7 @@ class AdminController extends Controller {
         $this->mm = new MotModel;
         $liste = $this->mm->liste_mot_et_posteur();
 
-        $model = "<p><span class='mot'>%s</span> <a href='%s'>%s</a> proposé par %s <span class='date'>%s</span>
-            </p>";
+        $model = "<li><b>%s</b> <a href='%s'>%s</a> proposé par %s %s</li>";
         $html = "";
 
         foreach ($liste as $mot) {
@@ -174,21 +173,25 @@ class AdminController extends Controller {
         $lien_membre = "<a href='admin_addMembre/%d/ajouter-membre.html' title='ajouter un membre'><img src='imgs/user.png' alt='ajout' /></a>";
         $lien_admin = "<a href='admin_addAdmin/%d/ajouter-admin.html' title='ajouter un admin'><img src='imgs/admin.png' alt='ajout' /></a>";
 
-        $p = "<p class='%s'>
-                    <span class='pseudo'>%s</span>
-                    <span class='niveau'>%s</span>
-                    %s
-             </p>\n";
+        $t = "<tr class='%s'>
+                    <td>%s</td>
+                    <td>%s</td>
+                    <td>%s</td>
+             </tr>\n";
 
-        $html =  "<p class='titre pair'>
-                    <span class='pseudo'>Pseudo</span>
-                    <span class='niveau'>Statut</span>
-             </p>\n";
+        $html =  "<table>
+                    <thead>
+                        <th>Pseudo</th>
+                        <th>Statut</th>
+                        <th>Action</th>
+                    </thead>
+                    <tbody>\n";
+
         $html_liens = "";
         $niveau = array('banni', 'en attente', 'membre', 'modérateur', 'admin', 'admin');
         $ligne = 0;
         foreach ($liste as $membre) {
-            // classe laternée de la ligne
+            // classe alternée de la ligne
             $classe = (++$ligne % 2 == 0) ? "pair" : "impair";
 
             // le lien a afficher pour la gestion du membre
@@ -216,8 +219,9 @@ class AdminController extends Controller {
             // on ne peut pas s'auto administrer
             if ($id == User::$id)
                 $html_liens = '';
-            $html .= sprintf($p, $classe, $membre->user, $niveau[$membre->rang], $html_liens);
+            $html .= sprintf($t, $classe, $membre->user, $niveau[$membre->rang], $html_liens);
         }
+        $html .= "</tbody>\n</table>\n";
 
         // on reserve le privilège a l'admin
         if (User::$rang > 2)

@@ -25,8 +25,10 @@ class UserController extends Controller {
                     $_SESSION['id_user'] = $id_user;
 
                     // retour vers la page precedente suite au login (ou a l'accueil par defaut)
-                    $redir = (isset($this->request->referer)) ? $this->request->referer : "../accueil.html";
-                    header('Location:' . $redir);
+                    //$redir = (isset($this->request->referer)) ? $this->request->referer : "../accueil.html";
+                    //lastcrap_show/derniers-trucs.html
+                    $redirUrl = "../news.html";
+                    header('Location:' . $redirUrl);
                     exit;
                 } else {
                     // erreur de login
@@ -68,22 +70,35 @@ class UserController extends Controller {
 
                 if ($resultats_valides > 0 || $resultats_invalides > 0) {
                     $nb_parties = $resultats_invalides + $resultats_valides;
-                    $resultats = "<p>MDLM validés : {$resultats_valides}</p>";
-                    $resultats.= "<p>MDLM foirés : {$resultats_invalides}</p>";
+                    $resultats  = "<table class='user_res'>\n<thead>\n";
+                    $resultats .= "<th>Validés</th>\n";
+                    $resultats .= "<th>Invalidés</th>\n";
+                    $resultats .= "<th>Total</th>\n";
+                    $resultats .= "</thead>\n</tbody>\n";
+                    $resultats .= "<tr class='impair'><td>{$resultats_valides}</td>";
+                    $resultats .= "<td>{$resultats_invalides}</td>";
+                    $resultats .= "<td>{$nb_parties}</td></tr>";
+                    $resultats .= "</tbody>\n</table>";
                 } else {
-                    $resultats = "<p>Aucunes tentatives pour l'instant.</p>";
+                    $resultats = "<p>Aucune tentative pour l'instant.</p>";
                 }
 
                 // on prepare le html dynampique a envoyer a la page de membre
                 $html = "";
-                $html.= "<h1>{$infos->user}</h1>";
-                $html.= "<div class='cadre_bleu radius10'>";
-                $html.= "<p>Adresse e-mail : {$infos->mail}</p>";
-                $html.= "<p>Date d'inscription  : {$this->formatteDate($infos->inscription)}</p>";
-                $html.= "<p>Derniere visite     : {$this->formatteDate($infos->last)}</p>";
-                $html.= "<p>Etablissement       : {$infos->type_etab} de {$infos->ville}</p>";
-                $html.= "<p>Promotion           : {$infos->promo}  |  {$infos->annee}/" . ($infos->annee + 1) . "</p>";
-                $html.= "<br />" . $resultats;
+                $html.= "<h2>{$infos->user}</h2>";
+                $html.= "<div class='column1'>\n<ul>";
+                $html.= "<li>Adresse e-mail : <a href='mailto:{$infos->mail}'>{$infos->mail}</a></li>";
+                $html.= "<li>Date d'inscription  : <b>{$this->formatteDate($infos->inscription)}</b></li>";
+                $html.= "<li>Dernière visite     : <b>{$this->formatteDate($infos->last)}</b></li>";
+                $html.= "<li>Établissement       : <b>{$infos->type_etab}</b> de <b>{$infos->ville}</b></li>";
+                $html.= "<li>Promotion           : <b>{$infos->promo}</b>  |  <b>{$infos->annee}/" . ($infos->annee + 1) . "</b></li>";
+                $html.= "</ul>";
+                $html .= "<p><a href='user_histo/{$id}/user_{$infos->user}.html'>Historique de ce joueur</a></p>";
+                $html.= "</div>";
+                $html.= "<div class='column2'>";
+                $html .= "<h3>Résultats :</h3>";
+                $html .= "<p>Les Mots de <b>{$infos->user}</b> :";
+                $html .= $resultats . "</p>";
                 $html.= "</div>";
 
 
@@ -97,7 +112,7 @@ class UserController extends Controller {
                 return false;
             }
         } else {
-            $this->error = "Probleme avec le parametre $id";
+            $this->error = "Probleme avec le paramètre $id";
             $this->affiche_erreur(ERROR_SYS, $this->request->params);
             return false;
         }
@@ -118,12 +133,11 @@ class UserController extends Controller {
         }
 
         // modele ligne membre
-        $mlm = "<p><a href='user_pageMembre/%d/user_%s.html' class='lien_membre'>%s</a> inscrit le ";
-        $mlm.= "<span class='date_insc'>%s</span> ";
-        $mlm.= "%s %s</p>\n";
+        $mlm  = "<li><a href='user_pageMembre/%d/user_%s.html'>%s</a> inscrit depuis le %s ";
+        $mlm .= "%s %s</li>\n";
 
         // contenu html
-        $html = "";
+        $html = "<ul>\n";
 
         foreach ($list_all as $membre) {
             $image = (in_array($membre->id, $id_unv)) ? "<img src='imgs/pendule.png' alt='img' title='validation du compte' style='vertical-align: middle;' />" : "";
@@ -138,6 +152,7 @@ class UserController extends Controller {
             $urlUser = $this->formatrewriting($membre->user);
             $html .= sprintf($mlm, $membre->id, $urlUser, $membre->user, date('d/m/Y', $membre->inscription), $image, $resultats);
         }
+        $html .= "</ul>\n";
         $this->contenu['liste_membre_html'] = $html;
         $file = VUES . DS . "user" . DS . "liste-membre.php";
         $this->afficher_vue($file);
@@ -180,16 +195,16 @@ class UserController extends Controller {
 
                                                 /*
                                                  * On ne logue pas le type des son inscription
-                                                  $_SESSION['login'] = true;
-                                                  $_SESSION['id_user'] = $id;
-                                                 * 
+                                                 $_SESSION['login'] = true;
+                                                $_SESSION['id_user'] = $id;
+                                                * 
                                                  */
 
                                                 $lien_validation = "admin_validerMembre/$clef/validation-de-mon-compte.html";
                                                 $fichier_mail = VUES . DS . 'mail' . DS . 'mail-validation.php';
                                                 $contenu_mail = sprintf(file_get_contents($fichier_mail), filter_var($p['insc_user'], FILTER_SANITIZE_STRING), URL_BASE . $lien_validation);
 
-                                                $message_txt = "voila le lien de validation de votre compte : " . $lien_validation;
+                                                $message_txt = "Voilà le lien de validation de votre compte : " . $lien_validation;
 
                                                 $this->envoyer_mail($contenu_mail, filter_var($p['insc_mail'], FILTER_SANITIZE_EMAIL), $message_txt);
 
@@ -258,16 +273,16 @@ class UserController extends Controller {
         $um = new UserModel;
         $liste = $um->liste_par_score();
 
-        $html = "";
-        $mdl_lienUser = "<a href='user_pageMembre/%d/user_%s.html' class='lien_user'>%s</a>";
-        $mdl_ligne = "<p><span class='user'>%s</span> score : %d MDLM <span class='barre radius5' style='width:%dpx;'></span></p>";
+        $html = "<ul>";
+        $mdl_lienUser = "<a href='user_pageMembre/%d/user_%s.html'>%s</a>";
+        $mdl_ligne = "<li>%s score : %d MDLM</li>";
 
         foreach ($liste as $user) {
             $score = ($user->score > 320) ? 320 : $user->score;
             $lien = sprintf($mdl_lienUser, $user->id, $this->formatrewriting($user->user), $user->user);
             $html.= sprintf($mdl_ligne, $lien, $user->score, $score);
         }
-
+        $html .= "</ul>";
         $this->contenu['liste'] = $html;
 
         $file = VUES . DS . $this->request->dossier . DS . $this->request->vue;
@@ -313,7 +328,62 @@ class UserController extends Controller {
         mail($mail, $sujet, $message, $header);
     }
 
+    function histo($id)
+    {
+        $id = intval(filter_var($id, FILTER_SANITIZE_NUMBER_INT));
+
+        if ($id > 0) {
+
+            $user = new UserModel();
+            $histo = $user->histo_membre($id);
+
+
+            if (count($histo)>0) {
+            $html = "<h2>Historique de <a href='user_pageMembre/{$histo[0]->id_user}/user_{$histo[0]->user}.html'>{$histo[0]->user}</a></h2>\n";
+            $html .= "<p><u>Info:</u> rouge-> pas validé !</p>";
+            $html .= "<div>";
+                $model .= "<h4>%s - (%s)</h4>\n";
+                $model .= "<p class='phrase'%s>%s</p>\n";
+                $model .= "%s\n";
+                foreach ($histo as $entry) {
+                    $name    = $entry->user;
+                    $urlUser = $this->formatrewriting($entry->user);
+                    $date    = date('d/m/y', $entry->heure);
+                    $style   = ($entry->valide!=1) ? "style = 'color:Tomato;'" : "" ;
+                    $phrase  = $entry->phrase;
+                    $mot     = $entry->mot;
+
+                    if ($entry->capture !== "") {
+                        $dossier_img = "captures/" . date("Y", $entry->heure);
+                        $capture = $dossier_img . "/" . $entry->capture;
+                        $image = "<img src='{$capture}' alt='capture' class='capture' />";
+                    } else {
+                        $image = "<p class='embed_block'>Pas de capture...</p>";
+                    }
+
+                    $html .= sprintf($model, $mot, $date, $style, $phrase, $image);
+                }                
+            } else {
+                $html = "<h2>Historique ?</h2>\n";
+                $html .= "<div>";
+                $html .= "<p class='embed_block'>Pas d'historique pour ce joueur.</p>";
+
+
+            }
+                $html .= "</div>";
+        }
+
+
+        $this->contenu['histo'] = $html;
+
+        $file = VUES . DS . $this->request->dossier . DS . "histo-resultats.html";
+        $this->afficher_vue($file);
+
+    }
+
+
 }
+
 
 #todo => faire systeme d'envoi du mail de confirmation du compte
 #todo => ajouter table comptes confirmés ou pas et faire un truc pour que le mec valide son mail

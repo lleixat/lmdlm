@@ -6,44 +6,39 @@
         <base href="<?php echo URL_BASE; ?>" />
         <title><?php echo TITLE ?></title>
 
-        <link rel="stylesheet" media="screen" href="css/general.css" />
-        <link rel="stylesheet" media="screen" href="css/trick.css" />
+        <link rel="stylesheet" media="screen" href="css/text.css" />
+        <link rel="stylesheet" media="screen" href="css/grid.css" />
+
         <script src="js/jquery-1.6.4.min.js"></script>
 
+        <link href="favicon.png" rel="shortcut icon" />
+
         <meta name="description" content="<?php echo DESCRIPTION ?>">
-        <style type="text/css">
-            p img{
-                vertical-align: middle;
-            }
-            div.bigbig{
-                font-family: 'Schoolbell', cursive;
-                font-size: 2.5em;
-                text-align: center;
-                font-weight: bold;
-            }
-        </style>
-    </head>
+     </head>
     <body>
-        <div id="conteneur" class="ombre10">
+        <div id="conteneur">
             <?php
-            require LAYOUT_USER_BAR;
             require LAYOUT_HEADER;
             require LAYOUT_NAV;
             ?>
 
             <div id="content">
-                <h1 class="titre_page">Le mot du jour</h1>
-                <div class="cadre_bleu radius10">
-                    <?php
-                    echo $this->contenu['phrase'];
-                    ;
-                    ?>
+            <h2>Espace personnel</h2>
+                <div class="column1">
+                    <h3>Le mot du jour</h3>
+                    <div>
+                        <?php
+                        echo $this->contenu['phrase'];
+                        ?>
+                    </div>
                 </div>
-                <h2>Historique</h2>
-                <div class="cadre_bleu radius10">
-                    <?php
-                    echo $this->contenu['histo'];
-                    ?>
+                <div class="column2">
+                    <h3>Historique</h3>
+                    <ul class="histo">
+                        <?php
+                        echo $this->contenu['histo'];
+                        ?>
+                    </ul>
                 </div>
             </div>
             <?php

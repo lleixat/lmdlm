@@ -205,7 +205,7 @@ class UserModel extends Model {
     }
 
     function liste_membres() {
-        $sql = "SELECT user,rang,u.id FROM users u LEFT JOIN unvalidated_user un ON u.id=un.user_id";
+        $sql = "SELECT user,rang,u.id FROM " . $this->tables['TABLE_USERS']. " u LEFT JOIN unvalidated_user un ON u.id=un.user_id";
         return $this->pdo->query($sql)->fetchAll(PDO::FETCH_OBJ);
     }
 
@@ -239,6 +239,31 @@ class UserModel extends Model {
         $req2->execute();
     }
 
+    function histo_membre($id)
+    {
+        /**
+         * Liste les résultats d'un membre donné
+         * @param user id
+         * return array
+         */
+        $sql = "SELECT id_user
+                     , mot
+                     , u.user
+                     , valide
+                     , capture
+                     , phrase
+                     , heure
+                  FROM " . $this-> tables['TABLE_RESULTATS'] . " r
+                  LEFT JOIN " . $this->tables['TABLE_USERS'] . " u
+                  ON r.id_user=u.id
+                  WHERE id_user= {$id}
+                  ORDER BY heure DESC
+                  LIMIT 0,30 ";
+
+        return $this->pdo->query($sql)->fetchAll(PDO::FETCH_OBJ);
+    }
+
 }
+
 
 ?>

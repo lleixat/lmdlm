@@ -11,33 +11,36 @@
 
         <title><?php echo TITLE ?></title>
 
-        <link rel="stylesheet" media="screen" href="css/general.css" />
-        <link rel="stylesheet" media="screen" href="css/trick.css" />
-        <script src="js/jquery-1.6.4.min.js"></script>
+        <link rel="stylesheet" media="screen" href="css/text.css" />
+        <link rel="stylesheet" media="screen" href="css/grid.css" />
+
+        <link href="favicon.png" rel="shortcut icon" />
 
         <meta name="description" content="<?php echo DESCRIPTION ?>">
     </head>
     <body>
-        <div id="conteneur" class="ombre10">
+        <div id="conteneur">
             <?php
-            require LAYOUT_USER_BAR;
-            require LAYOUT_HEADER;
-            require LAYOUT_NAV;
+            //require LAYOUT_HEADER;
+            //require LAYOUT_NAV;
             ?>
 
-            <din id="content">
-                <h1 class="titre_page">Erreur SYSTEME</h1>
-                <p>Il y a une couille dans le script ca arrive vu qu'on est des deustiens !</p>
+            <div id="content" style="margin-top: 100px;">
+                <h2>Erreur SYSTEME</h2>
+                <p><b>Il y a une couille dans le script ça arrive vu qu'on est des deustiens !</b></p>
                     <?php
                     if(isset($phrase)){
-                        echo "<h3>Indication dev</h3>";
+                        echo "<h4>Indication dev</h4>";
                         echo "<p>{$phrase}</p>";
                     }
                     if(isset($debug)){
                         $this->prp($debug);
                     }
                     ?>
-            </din>
+                <p>
+                    <a class="back" href="<?php echo $_SERVER['HTTP_REFERER']; ?>">← Retour</a>
+                </p>
+            </div>
 
 
 

@@ -6,48 +6,42 @@
         <base href="<?php echo URL_BASE; ?>" />
         <title><?php echo TITLE ?></title>
 
-        <link rel="stylesheet" media="screen" href="css/general.css" />
-        <link rel="stylesheet" media="screen" href="css/trick.css" />
+        <link rel="stylesheet" media="screen" href="css/text.css" />
+        <link rel="stylesheet" media="screen" href="css/grid.css" />
+
+        <link href="favicon.png" rel="shortcut icon" />
+
         <script src="js/jquery-1.6.4.min.js"></script>
 
         <meta name="description" content="<?php echo DESCRIPTION ?>">
-        <style type="text/css">
-            span.mot{
-                display: inline-block;
-                width: 250px;
-                text-align: right;
-                font-weight: bold;
-            }
-            div.cadre_bleu p img{
-                vertical-align: middle;
-            }
-        </style>
     </head>
     <body>
-        <div id="conteneur" class="ombre10">
+        <div id="conteneur">
             <?php
-            require LAYOUT_USER_BAR;
             require LAYOUT_HEADER;
             require LAYOUT_NAV;
             ?>
 
             <div id="content">
-                <h1 class="titre_page">proposer un mot</h1>
-                <div class="cadre_bleu radius10" >
-                    <?php
-                    echo $this->contenu['html_prop_mot'];
-                    ?>
+                <h2 class="titre_page">Proposer un mot</h2>
+                <p>Cette page permet de proposer un mot qui sera (<b>après validation</b>),
+                    ajouté à la liste des mots disponibles pour le jeu.</p>
+                <div class="column1" >
+                        <?php echo $this->contenu['html_prop_mot']; ?>
+                    <h3><?php echo $this->contenu['liste_mots_user']['title']; ?></h3>    
+                    <ul><?php echo $this->contenu['liste_mots_user']['list']; ?></ul>
                 </div>
-                <?php
-                echo $this->contenu['liste_mots_user'];
-                        echo $this->contenu['liste_tous_mots'];
-                ?>
+                <div class="column2">
+                    <h3>Tous les mots déjà proposés</h3>
+                    <ul><?php echo $this->contenu['liste_tous_mots']; ?></ul>
+                </div>
+<!-- <div id="yep">
+<p class="green">( OK )</p>
+<p class="yellow">( ! )</p>
+<p class="red">( X )</p>
 
-
+</div> -->
             </div>
-
-
-
 
             <?php
             require LAYOUT_FOOTER;

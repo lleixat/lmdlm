@@ -1,6 +1,5 @@
 <?php
-// onprend juste ce dont on a besoin dans le tableau de contenu
-$c = $contenu['liste_membre_html'];
+// on prend juste ce dont on a besoin dans le tableau de contenu
 ?>
 <!DOCTYPE html>
 
@@ -8,43 +7,29 @@ $c = $contenu['liste_membre_html'];
     <head>
         <meta charset="UTF-8">
         <base href="<?php echo URL_BASE; ?>" />
-        <title><?php echo TITLE ?></title>
+        <title><?php echo TITLE; ?></title>
+ 
+        <link rel="stylesheet" media="screen" href="css/text.css" />
+        <link rel="stylesheet" media="screen" href="css/grid.css" />
 
-        <link rel="stylesheet" media="screen" href="css/general.css" />
-        <link rel="stylesheet" media="screen" href="css/trick.css" />
+        <link href="favicon.png" rel="shortcut icon" />
+
         <script src="js/jquery-1.6.4.min.js"></script>
 
         <meta name="description" content="<?php echo DESCRIPTION ?>">
         
         
-        <style type="text/css">
-            a.lien_membre{
-                display: inline-block;
-                width: 250px;
-                text-align: right;
-                font-weight: bold;
-                color: #ADE0E0;
-                text-decoration: none;
-            }
-        </style>
-        
     </head>
     <body>
-        <div id="conteneur" class="ombre10">
+        <div id="conteneur">
             <?php
-            require LAYOUT_USER_BAR;
             require LAYOUT_HEADER;
             require LAYOUT_NAV;
             ?>
 
             <div id="content">
-                <h1>Liste des membres</h1>
-                <div class="cadre_bleu radius10">
-                    <?php
-                    echo $c;
-                    ?>  
-                </div>
-
+                <h2>Liste des membres</h2>
+                <?php echo $contenu['liste_membre_html']; ?>  
             </div>
 
 

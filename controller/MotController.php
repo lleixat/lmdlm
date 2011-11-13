@@ -40,13 +40,15 @@ class MotController extends Controller {
             $html = "<form action='mot_proposer/proposer-mot.html' enctype='multipart/form-data' method='post' id='pm_form'>
                         <p>
                             <input type='hidden' name='pm_jeton' value='{$pm_jeton}' />
-                            <label for='pm_mot'>Quel mot souhaitez vous proposer ?</label><br />
-                            <input type='text' name='pm_mot' id='pm_mot' /><br />
+                            <label for='pm_mot'>Quel mot souhaitez vous proposer ?</label>
+                        </p>
+                        <p>
+                            <input type='text' name='pm_mot' id='pm_mot' />
                             <input type='submit' value='Proposer !' />
                         </p>
                     </form>";
         } else {
-            $html = "<p>Vous devez etre inscrit pour proposer un mot</p>";
+            $html = "<p>Vous devez être inscrit pour proposer un mot !</p>";
         }
 
         $this->contenu['html_prop_mot'] = $html;
@@ -54,6 +56,7 @@ class MotController extends Controller {
         $file = VUES . DS . "mot" . DS . "proposer-mot.html";
         $this->afficher_vue($file);
     }
+
 
     /*
      * renvoie la liste des mots que le mec a deja proposé
@@ -68,20 +71,27 @@ class MotController extends Controller {
         $liste = $this->mm->liste_mots(User::$id, 25);
 
         if (count($liste) > 0) {
-            $titre = (User::$id !== null) ? "Vous avez proposé" : "Les derniers mots proposés";
-            $html = "<div class='cadre_bleu radius10'>\n<h2>{$titre}</h2>\n";
-            $mdl_ligne_mot = "<p><span class='mot'>%s</span> 
-                                <img src='%s' alt='validation' /> proposé %s </p>\n";
+            $titre = (User::$id !== null) ? "Vous avez déjà proposé" : "Les derniers mots proposés";
+            $list = "<table><tbody>";
+            $mdl_ligne_mot = "<li>\n<b>%s</b> <span><img src='%s' title='%s' alt='validation' /></span> %s</li>\n";
+            //$mdl_ligne_mot = "<tr><td><b>%s</b></td> <td><img src='%s' title='%s' alt='validation' /></td> <td>%s</td>\n</tr>";
             foreach ($liste as $mot) {
                 $date = $this->formatteDate($mot->date);
-                $image = ($mot->valide == 1) ? "imgs/valide.png" : "imgs/nonvalide.png";
-                $html.= sprintf($mdl_ligne_mot, $mot->mot, $image, $date);
+               if ($mot->valide == 1) {
+                    $image = "imgs/valide.png";
+                    $imageTitle = "Ce mot a été validé !";
+                } else {
+                    $image = "imgs/nonvalide.png";
+                    $imageTitle = "Non validé !";
+                }
+                $list .= sprintf($mdl_ligne_mot, $mot->mot, $image, $imageTitle, $date);
             }
-            $this->contenu['liste_mots_user'] = $html . "</div>";
+                $list .= "</tbody>\n</table>";
+            $this->contenu['liste_mots_user']['title'] = $titre;
+            $this->contenu['liste_mots_user']['list'] = $list;
         } else {
-            $this->contenu['liste_mots_user'] = "<div class='cadre_bleu'>
-                <h2>Vous n'avez proposé aucuns mots</h2>
-            </div>";
+            $this->contenu['liste_mots_user']['title'] = "Quelque chose de funky vient de se passer :";
+            $this->contenu['liste_mots_user']['list'] = "<p class='erreur'>Vous n'avez pour l'instant proposé aucun mots !</p>";
         }
     }
 
@@ -96,20 +106,22 @@ class MotController extends Controller {
 
         if (count($liste) > 0) {
 
-            $html = "<div class='cadre_bleu radius10'>\n<h2>Tous les mots disponibles</h2>\n";
-            $mdl_ligne_mot = "<p><span class='mot'>%s</span> 
-                                <img src='%s' alt='validation' /> proposé %s </p>\n";
+            $html = "";
+            $mdl_ligne_mot = "<li><b>%s</b><span><img src='%s' title='%s' alt='validation' /> depuis %s</li>";
             foreach ($liste as $mot) {
                 $date = $this->formatteDate($mot->date);
-                $image = ($mot->valide == 1) ? "imgs/valide.png" : "imgs/nonvalide.png";
-                $html.= sprintf($mdl_ligne_mot, $mot->mot, $image, $date);
+                if ($mot->valide == 1) {
+                    $image = "imgs/valide.png";
+                    $imageTitle = "Ce mot a été validé !";
+                } else {
+                    $image = "imgs/nonvalide.png";
+                    $imageTitle = "Ce mot nest pas, ou ne sera pas validé !";
+                }
+                $html.= sprintf($mdl_ligne_mot, $mot->mot, $image, $imageTitle, $date);
             }
-            $this->contenu['liste_tous_mots'] = $html . "</div>";
+            $this->contenu['liste_tous_mots'] = $html;
         } else {
-            $this->contenu['liste_tous_mots'] = "
-                <div class='cadre_bleu'>
-                    <h2>Y a pas de mots la dedans...</h2>
-                </div>";
+            $this->contenu['liste_tous_mots'] = "<p class='erreur'>Aucun mot à afficher...</p>";
         }
     }
 
@@ -129,8 +141,8 @@ class MotController extends Controller {
             if ($objmot->id_resultat == 0) {
                 $lien_resultat = "<p>
                 <a href='mot_reussite/signaler-ma-reussite.html' 
-                            class='bouton radius5'>J'ai réussi !</a></p>";
-                $phrase .= "<p>Voila ton mot d'aujourd'hui : <div class='bigbig'>" . ucfirst($objmot->mot) . "</div> bonne chance !</p>" . $lien_resultat;
+                            class='bouton'>J'ai réussi !</a></p>";
+                $phrase .= "<p>Voici le mot d'aujourd'hui :</p><p class='bigbig'>" . ucfirst($objmot->mot) . "</p> <p>bonne chance !</p>" . $lien_resultat;
             } else {
                 $lien_resultat = "";
 
@@ -140,7 +152,7 @@ class MotController extends Controller {
                 switch ($etat_de_validation) {
                     case "0": // en attente de validation 
                         $image = "<img src='imgs/pendule.png' alt='img statut' />";
-                        $phrase .= "<p>{$image} Ajourd'hui ton mot était '<b>{$objmot->mot}</b>',<br /> tu dois attendre la validation...</b>'</p>" . $lien_resultat;
+                        $phrase .= "<p>{$image} Ajourd'hui ton mot était '<b>{$objmot->mot}</b>',<br /> tu dois attendre la validation...'</p>" . $lien_resultat;
                         break;
                     case "1": // validé
                         $image = "<img src='imgs/valide.png' alt='img statut' />";
@@ -175,7 +187,7 @@ class MotController extends Controller {
 
         if (count($liste) > 0) {
             $html = "";
-            $mdl = "<p>%s LMDLM était : <b>%s</b> %s</p>";
+            $mdl = "<li>%s LMDLM était : <b>%s</b> %s</li>";
             foreach ($liste as $motjour) {
 
                 $id_resultat = $motjour->id_resultat;
@@ -216,20 +228,20 @@ class MotController extends Controller {
 
             if ($infos->id_resultat == 0) {
 
-                $phrase = "<p>Aujourd'hui " . User::$user . ", tu devais réussir a placer le mot :</p>";
-                $phrase.= "<div class='bigbig'>" . ucfirst($infos->mot) . "</div>";
-                $phrase.= "<p>Dans quelle phrase l'avez vous placé ?</p>";
+                $phrase = "<p>Aujourd'hui <b>" . User::$user . "</b>, le mot à placer était :</p>";
+                $phrase.= "<p class='bigbig'>" . ucfirst($infos->mot) . "</p>";
+                $phrase.= "<h4>Dans quelle phrase a t'il été placé ?</h4>";
                 $form = "<form action='mot_signalerReussite/validation-du-mot.html' 
                           enctype='multipart/form-data' id='vm_form' method='post'>
                         <p>
                             <input type='hidden' name='hash' value='{$infos->hash}' />
-                            <textarea name='vm_phrase' id='vm_phrase' cols='30' rows='10' class='radius10'></textarea>
+                            <textarea name='vm_phrase' id='vm_phrase' cols='125' rows='10'></textarea>
                         </p>\n
+                            <h4><label for='vm_capture'>Ne pas oublier la capture d'écran :</label></h4>
                         <p>
-                            <label for='vm_capture'>capture d'ecran</label><br />
                             <input type='file' name='vm_capture' id='vm_capture' /><br />
     
-                            <input type='submit' value='ENVOYER' />\n
+                            <input type='submit' value='Envoyer ...' />\n
                         </p>\n
                     </form>\n";
             } else {
@@ -257,11 +269,6 @@ class MotController extends Controller {
             $f = $f['vm_capture'];
             require CONTROLLER . DS . 'FileController.php';
             $fc = new FileController;
-
-
-
-
-
 
             $upload = $fc->upload_fichier($f, array("image/jpeg", "image/png"));
             if ($upload) {
@@ -298,18 +305,20 @@ class MotController extends Controller {
                 require MODEL . DS . 'MotModel.php';
                 $this->mm = new MotModel;
 
+                $mot = $this->mm->renvoie_infos_mot_du_jour();
+                $mot = $mot->mot;
                 /*
                  *  on enregistre la phrase et la capture dans la base                
                  *  ca doit retourner l'id de resultat.
                  *  on le prend et on le place dans le mot_du_jour pour faire le lien
-                 *  entre le mot a trouver, et le resultat fourni par le type
+                 *  entre le mot a trouver, et le resultat fourni
                  */
-                $id_resultat = $this->mm->enregistrer_resultat_du_gars($phrase, $capture);
+                $id_resultat = $this->mm->enregistrer_resultat_du_gars($uId, $mot, $phrase, $capture);
 
                 if ($id_resultat > 0) {
                     // on met le mot du jour en attente de validation
                     if ($this->mm->maj_mdj_attente_validation($id_resultat, $hash)) {
-                        // impecable
+                        // impeccable
                         header('Location:../mot_resultat-en-attente.html');
                     } else {
                         // erreur de mise a jour du 'mot_du_jour' du gars
@@ -318,7 +327,7 @@ class MotController extends Controller {
                     }
                 } else {
                     // probleme interne d'enregistrement du resultat
-                    $this->error = "Probleme lors de l'enregistrement du resultat.($id_resultat)";
+                    $this->error = "Problème lors de l'enregistrement du résultat.($id_resultat)";
                     $this->affiche_erreur();
                 }
             } else {

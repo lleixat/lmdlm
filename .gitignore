@@ -1,3 +1,11 @@
 *.swp
 .livereload
 config.rb
+.sass/
+*.scss
+.sass-cache/
+ConfDB.php
+web/conf/*
+web/uploads/**
+web/fonts/Cabin-Regular*
+web/captures/2011/*
