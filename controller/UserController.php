@@ -20,9 +20,11 @@ class UserController extends Controller {
                 $id_user = $user->controle_identifiants($params['ub_user'], $params['ub_pass']);
 
                 if ($id_user !== false) {
-                    // correspondance confirmée, on peut logger le type
+                    // correspondance confirmée, on peut logger
                     $_SESSION['login'] = true;
                     $_SESSION['id_user'] = $id_user;
+
+
 
                     // retour vers la page precedente suite au login (ou a l'accueil par defaut)
                     //$redir = (isset($this->request->referer)) ? $this->request->referer : "../accueil.html";
@@ -263,6 +265,12 @@ class UserController extends Controller {
     }
 
     function deco() {
+
+        // On met à jour le dernier passage de l'utilisateur
+        $user= new UserModel();
+        $user->maj_last_visite(User::$id);
+        $user->maj_user_online(User::$id, false);
+
         session_destroy();
 
         header('Location:../accueil.html');
@@ -334,17 +342,17 @@ class UserController extends Controller {
 
         if ($id > 0) {
 
-            $user = new UserModel();
+            $user  = new UserModel();
             $histo = $user->histo_membre($id);
 
 
             if (count($histo)>0) {
-            $html = "<h2>Historique de <a href='user_pageMembre/{$histo[0]->id_user}/user_{$histo[0]->user}.html'>{$histo[0]->user}</a></h2>\n";
+            $html  = "<h2>Historique de <a href='user_pageMembre/{$histo[0]->id_user}/user_{$histo[0]->user}.html'>{$histo[0]->user}</a></h2>\n";
             $html .= "<p><u>Info:</u> rouge-> pas validé !</p>";
-            $html .= "<div>";
-                $model .= "<h4>%s - (%s)</h4>\n";
-                $model .= "<p class='phrase'%s>%s</p>\n";
-                $model .= "%s\n";
+            $html .= "<div class='wrap_parent'>";
+                $model .= "<h4><span class='clickme'>%s</span> - (%s)</h4>\n";
+                $model .= "<div class='wrap'><p class='phrase' %s>%s</p>\n";
+                $model .= "%s\n</div>";
                 foreach ($histo as $entry) {
                     $name    = $entry->user;
                     $urlUser = $this->formatrewriting($entry->user);
@@ -355,16 +363,16 @@ class UserController extends Controller {
 
                     if ($entry->capture !== "") {
                         $dossier_img = "captures/" . date("Y", $entry->heure);
-                        $capture = $dossier_img . "/" . $entry->capture;
-                        $image = "<img src='{$capture}' alt='capture' class='capture' />";
+                        $capture     = $dossier_img . "/" . $entry->capture;
+                        $image       = "<div class='capture'><img src='{$capture}' alt='capture'/></div>";
                     } else {
-                        $image = "<p class='embed_block'>Pas de capture...</p>";
+                        $image       = "<p class='embed_block'>Pas de capture...</p>";
                     }
 
                     $html .= sprintf($model, $mot, $date, $style, $phrase, $image);
                 }                
             } else {
-                $html = "<h2>Historique ?</h2>\n";
+                $html  = "<h2>Historique ?</h2>\n";
                 $html .= "<div>";
                 $html .= "<p class='embed_block'>Pas d'historique pour ce joueur.</p>";
 

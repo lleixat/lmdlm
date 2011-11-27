@@ -34,8 +34,8 @@ class UserModel extends Model {
 
         // modifier tout ca avec les tables du fichier ConfDB.php
 
-        $sql = "SELECT user, mail, image, rang, first
-                inscription , last, u.id, t.nom
+        $sql = "SELECT user, status, mail, image, rang, first
+                inscription , last,u.id, t.nom
                 type_etab , ville, p.nom promo, annee
                 FROM (
                 (
@@ -146,8 +146,21 @@ class UserModel extends Model {
         return $this->pdo->query($sql)->fetchAll(PDO::FETCH_OBJ);
     }
 
-    function maj_last_viste($id) {
+    function maj_last_visite($id) {
         $sql = "UPDATE " . $this->tables['TABLE_USERS'] . " SET last='" . time() . "' 
+                WHERE id='{$id}'";
+        $this->pdo->exec($sql);
+    }
+
+    function set_status($id, $status='1'){
+        /**
+         * Met à jour le statut online du l'utilisataur dans la base
+         * Placée ici en attendant de trouver mieux (ca c'est du comm !)
+         *
+         * @param1 id de l'utilisateur courrant
+         * @param2 boolean defaut true
+         */
+        $sql = "UPDATE " . $this->tables['TABLE_USERS'] . " SET status='{$status}' 
                 WHERE id='{$id}'";
         $this->pdo->exec($sql);
     }

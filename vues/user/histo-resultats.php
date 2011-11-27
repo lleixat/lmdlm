@@ -18,6 +18,26 @@
 
         <meta name="description" content="<?php echo DESCRIPTION ?>">
 
+        <script type="text/javascript">
+
+            $(document).ready(function(){
+                $('.wrap').hide();
+
+                $('.clickme').click(function() {
+                    var block=$(this).parent().next();
+
+                    if (block.css('display')=='none') {
+                        block.slideDown('slow').show();
+                       
+                    } else {
+                        block.slideUp('slow');
+                    }
+
+                });
+            });
+
+        </script>
+
     </head>
     <body>
         <div id="conteneur">
